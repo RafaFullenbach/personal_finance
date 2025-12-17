@@ -1,6 +1,6 @@
 <Solution>
+  <Project Path="personal_finance.API/personal_finance.API.csproj" />
   <Project Path="personal_finance.Application/personal_finance.Application.csproj" />
   <Project Path="personal_finance.Domain/personal_finance.Domain.csproj" />
   <Project Path="personal_finance.Infrastructure/personal_finance.Infrastructure.csproj" />
-  <Project Path="personal_finance/personal_finance.API.csproj" />
 </Solution>
