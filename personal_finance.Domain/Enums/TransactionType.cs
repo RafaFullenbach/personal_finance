@@ -4,7 +4,7 @@ using System.Text;
 
 namespace personal_finance.Domain.Enums
 {
-    internal enum TransactionType
+    public enum TransactionType
     {
         Debit = 1,
         Credit = 2

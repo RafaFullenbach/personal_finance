@@ -4,7 +4,7 @@ using System.Text;
 
 namespace personal_finance.Domain.Enums
 {
-    internal enum TransactionStatus
+    public enum TransactionStatus
     {
         Pending = 1,
         Confirmed = 2,

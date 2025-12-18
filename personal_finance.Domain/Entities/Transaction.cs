@@ -6,7 +6,7 @@ using System.Text;
 
 namespace personal_finance.Domain.Entities
 {
-    internal class Transaction
+    public class Transaction
     {
         public Guid Id { get; set; }
 
