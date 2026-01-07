@@ -3,4 +3,5 @@
   <Project Path="personal_finance.Application/personal_finance.Application.csproj" />
   <Project Path="personal_finance.Domain/personal_finance.Domain.csproj" />
   <Project Path="personal_finance.Infrastructure/personal_finance.Infrastructure.csproj" />
+  <Project Path="personal_finance.Tests/personal_finance.Tests.csproj" Id="91e0b070-768b-4468-b7ab-07c31d5cdbde" />
 </Solution>
