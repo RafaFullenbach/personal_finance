@@ -44,6 +44,8 @@ builder.Services.AddScoped<CancelTransactionHandler>();
 
 // Query Handlers
 builder.Services.AddScoped<GetAllTransactionsHandler>();
+builder.Services.AddScoped<GetTransactionByIdHandler>();
+
 
 var app = builder.Build();
 

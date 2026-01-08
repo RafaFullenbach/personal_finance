@@ -34,5 +34,10 @@ namespace personal_finance.Infrastructure.Persistence.InMemory
         {
             return _store.Values.ToList().AsReadOnly();
         }
+
+        public Transaction? GetById(Guid id)
+        {
+            return _store.TryGetValue(id, out var t) ? t : null;
+        }
     }
 }

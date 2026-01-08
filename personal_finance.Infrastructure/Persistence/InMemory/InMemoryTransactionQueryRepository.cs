@@ -52,5 +52,15 @@ namespace personal_finance.Infrastructure.Persistence.InMemory
             CompetenceMonth = t.CompetenceMonth,
             Description = t.Description
         };
+
+        public Task<TransactionListItemDto?> GetByIdAsync(Guid id)
+        {
+            var t = _writeRepo.GetById(id);
+
+            if (t is null)
+                return Task.FromResult<TransactionListItemDto?>(null);
+
+            return Task.FromResult<TransactionListItemDto?>(Map(t));
+        }
     }
 }

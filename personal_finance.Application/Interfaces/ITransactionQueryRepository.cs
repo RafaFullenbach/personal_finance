@@ -8,5 +8,6 @@ namespace personal_finance.Application.Interfaces
     public interface ITransactionQueryRepository
     {
         Task<IReadOnlyList<TransactionListItemDto>> GetAsync(GetTransactionsQuery query);
+        Task<TransactionListItemDto?> GetByIdAsync(Guid id);
     }
 }
