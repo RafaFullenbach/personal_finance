@@ -1,6 +1,8 @@
-﻿using personal_finance.Application.Interfaces;
+﻿using personal_finance.Application.Errors;
+using personal_finance.Application.Interfaces;
 using personal_finance.Domain.Entities;
 using personal_finance.Domain.Enums;
+using personal_finance.Application.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,10 +18,14 @@ namespace personal_finance.Application.UseCases.CreateTransaction
             _repository = repository;
         }
 
-        public async Task<CreateTransactionResult> HandleAsync(
-          CreateTransactionCommand command)
+        public async Task<CreateTransactionResult> HandleAsync(CreateTransactionCommand command)
         {
-            var type = Enum.Parse<TransactionType>(command.Type, true);
+            if (!Enum.TryParse<TransactionType>(command.Type, ignoreCase: true, out var type))
+            {
+                throw ValidationException.Invalid(
+                    $"Transaction type '{command.Type}' is invalid.",
+                    ErrorCodes.TransactionInvalidType);
+            }
 
             var transaction = new Transaction(
                 command.Amount,

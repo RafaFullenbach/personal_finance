@@ -28,6 +28,14 @@ namespace personal_finance.API.Middleware
             {
                 await WriteProblem(context, HttpStatusCode.NotFound, ex.Message);
             }
+            catch (ValidationException ex)
+            {
+                await WriteProblem(
+                    context,
+                    HttpStatusCode.BadRequest,
+                    ex.Message,
+                    ex.Code);
+            }
             catch (Exception)
             {
                 await WriteProblem(context, HttpStatusCode.InternalServerError,
@@ -35,7 +43,7 @@ namespace personal_finance.API.Middleware
             }
         }
 
-        private static async Task WriteProblem(HttpContext context, HttpStatusCode status, string message)
+        private static async Task WriteProblem(HttpContext context, HttpStatusCode status, string message, string? code = null)
         {
             context.Response.ContentType = "application/problem+json";
             context.Response.StatusCode = (int)status;
@@ -45,6 +53,7 @@ namespace personal_finance.API.Middleware
                 type = "about:blank",
                 title = status.ToString(),
                 status = (int)status,
+                code,
                 detail = message
             };
 
