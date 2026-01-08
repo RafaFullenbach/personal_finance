@@ -1,4 +1,5 @@
 ﻿using personal_finance.Domain.Exceptions;
+using personal_finance.Application.Exceptions;
 using System.Net;
 using System.Text.Json;
 
@@ -23,9 +24,9 @@ namespace personal_finance.API.Middleware
             {
                 await WriteProblem(context, HttpStatusCode.Conflict, ex.Message);
             }
-            catch (InvalidOperationException ex) // por enquanto (ex: not found nos handlers)
+            catch (NotFoundException ex)
             {
-                await WriteProblem(context, HttpStatusCode.BadRequest, ex.Message);
+                await WriteProblem(context, HttpStatusCode.NotFound, ex.Message);
             }
             catch (Exception)
             {

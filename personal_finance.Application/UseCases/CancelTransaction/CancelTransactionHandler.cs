@@ -1,4 +1,5 @@
-﻿using personal_finance.Application.Interfaces;
+﻿using personal_finance.Application.Exceptions;
+using personal_finance.Application.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,7 +21,7 @@ namespace personal_finance.Application.UseCases.CancelTransaction
             var transaction = await _repository.GetByIdAsync(command.TransactionId);
 
             if (transaction is null)
-                throw new InvalidOperationException("Transaction not found.");
+                throw NotFoundException.For("Transaction", command.TransactionId);
 
             // Domínio decide se pode cancelar
             transaction.Cancel();
