@@ -8,12 +8,24 @@ using personal_finance.Application.Queries.Transactions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+// Swagger com grupos de endpoints
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("Commands", new() { Title = "Personal Finance API - Commands", Version = "v1" });
+    c.SwaggerDoc("Queries", new() { Title = "Personal Finance API - Queries", Version = "v1" });
+
+    // Mostra só endpoints do grupo correto em cada doc
+    c.DocInclusionPredicate((docName, apiDesc) =>
+    {
+        // Se não tiver GroupName, cai no default (opcional)
+        var groupName = apiDesc.GroupName ?? "Commands";
+        return string.Equals(groupName, docName, StringComparison.OrdinalIgnoreCase);
+    });
+});
 
 // Cria UMA instância compartilhada do InMemoryTransactionRepository
 builder.Services.AddSingleton<InMemoryTransactionRepository>();
@@ -41,7 +53,12 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/Commands/swagger.json", "Commands");
+        c.SwaggerEndpoint("/swagger/Queries/swagger.json", "Queries");
+    });
 }
 
 app.UseHttpsRedirection();
