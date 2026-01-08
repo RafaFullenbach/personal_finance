@@ -29,5 +29,10 @@ namespace personal_finance.Infrastructure.Persistence.InMemory
             _store[transaction.Id] = transaction;
             return Task.CompletedTask;
         }
+
+        public IReadOnlyCollection<Transaction> GetAll()
+        {
+            return _store.Values.ToList().AsReadOnly();
+        }
     }
 }
