@@ -1,3 +1,4 @@
+using personal_finance.API.Middleware;
 using personal_finance.Application.Interfaces;
 using personal_finance.Application.UseCases.CancelTransaction;
 using personal_finance.Application.UseCases.ConfirmTransaction;
@@ -22,6 +23,8 @@ builder.Services.AddScoped<ConfirmTransactionHandler>();
 builder.Services.AddScoped<CancelTransactionHandler>();
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

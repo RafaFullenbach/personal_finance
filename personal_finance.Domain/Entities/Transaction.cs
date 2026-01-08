@@ -1,4 +1,5 @@
 ﻿using personal_finance.Domain.Enums;
+using personal_finance.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
@@ -62,8 +63,7 @@ namespace personal_finance.Domain.Entities
         public void Cancel()
         {
             if (Status != TransactionStatus.Pending)
-                throw new InvalidOperationException(
-                    "Only pending transactions can be cancelled.");
+                throw new BusinessRuleException("Only pending transactions can be cancelled.");
 
             Status = TransactionStatus.Cancelled;
         }
