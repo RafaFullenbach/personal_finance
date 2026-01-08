@@ -1,6 +1,7 @@
 ﻿using personal_finance.Application.UseCases.ConfirmTransaction;
 using personal_finance.Application.UseCases.CreateTransaction;
 using personal_finance.Infrastructure.Persistence.InMemory;
+using personal_finance.Application.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -43,7 +44,7 @@ namespace personal_finance.Tests.Application
             var repo = new InMemoryTransactionRepository();
             var confirm = new ConfirmTransactionHandler(repo);
 
-            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await Assert.ThrowsAsync<NotFoundException>(async () =>
             {
                 await confirm.HandleAsync(new ConfirmTransactionCommand
                 {

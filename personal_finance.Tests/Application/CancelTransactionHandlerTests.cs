@@ -1,6 +1,8 @@
-﻿using personal_finance.Application.UseCases.CancelTransaction;
+﻿using personal_finance.Application.Exceptions;
+using personal_finance.Application.UseCases.CancelTransaction;
 using personal_finance.Application.UseCases.ConfirmTransaction;
 using personal_finance.Application.UseCases.CreateTransaction;
+using personal_finance.Domain.Exceptions;
 using personal_finance.Infrastructure.Persistence.InMemory;
 using System;
 using System.Collections.Generic;
@@ -47,7 +49,7 @@ namespace personal_finance.Tests.Application
             var cancelHandler = new CancelTransactionHandler(repository);
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await Assert.ThrowsAsync<NotFoundException>(async () =>
             {
                 await cancelHandler.HandleAsync(new CancelTransactionCommand
                 {
@@ -84,7 +86,7 @@ namespace personal_finance.Tests.Application
             var cancelHandler = new CancelTransactionHandler(repository);
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await Assert.ThrowsAsync<BusinessRuleException>(async () =>
             {
                 await cancelHandler.HandleAsync(new CancelTransactionCommand
                 {
