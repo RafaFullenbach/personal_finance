@@ -16,16 +16,29 @@ namespace personal_finance.Infrastructure.Persistence.InMemory
             _writeRepo = writeRepo;
         }
 
-        public Task<IReadOnlyList<TransactionListItemDto>> GetAllAsync()
+        public Task<IReadOnlyList<TransactionListItemDto>> GetAsync(GetTransactionsQuery query)
         {
-            // Precisamos de um jeito de listar as transações guardadas.
-            // Então vamos expor um método interno no writeRepo para leitura.
-            var items = _writeRepo.GetAll()
+            var items = _writeRepo.GetAll().AsQueryable();
+
+            if (query.Year.HasValue)
+                items = items.Where(t => t.CompetenceYear == query.Year.Value);
+
+            if (query.Month.HasValue)
+                items = items.Where(t => t.CompetenceMonth == query.Month.Value);
+
+            if (!string.IsNullOrWhiteSpace(query.Type))
+                items = items.Where(t => t.Type.ToString().Equals(query.Type, StringComparison.OrdinalIgnoreCase));
+
+            if (!string.IsNullOrWhiteSpace(query.Status))
+                items = items.Where(t => t.Status.ToString().Equals(query.Status, StringComparison.OrdinalIgnoreCase));
+
+            var result = items
+                .OrderByDescending(t => t.TransactionDate)
                 .Select(Map)
                 .ToList()
                 .AsReadOnly();
 
-            return Task.FromResult((IReadOnlyList<TransactionListItemDto>)items);
+            return Task.FromResult((IReadOnlyList<TransactionListItemDto>)result);
         }
 
         private static TransactionListItemDto Map(Transaction t) => new()

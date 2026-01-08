@@ -7,6 +7,6 @@ namespace personal_finance.Application.Interfaces
 {
     public interface ITransactionQueryRepository
     {
-        Task<IReadOnlyList<TransactionListItemDto>> GetAllAsync();
+        Task<IReadOnlyList<TransactionListItemDto>> GetAsync(GetTransactionsQuery query);
     }
 }

@@ -14,9 +14,9 @@ namespace personal_finance.Application.Queries.Transactions
             _queryRepository = queryRepository;
         }
 
-        public Task<IReadOnlyList<TransactionListItemDto>> HandleAsync(GetAllTransactionsQuery query)
+        public Task<IReadOnlyList<TransactionListItemDto>> HandleAsync(GetTransactionsQuery query)
         {
-            return _queryRepository.GetAllAsync();
+            return _queryRepository.GetAsync(query);
         }
     }
 }
