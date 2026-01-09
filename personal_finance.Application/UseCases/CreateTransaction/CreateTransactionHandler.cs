@@ -4,18 +4,19 @@ using personal_finance.Domain.Entities;
 using personal_finance.Domain.Enums;
 using personal_finance.Application.Exceptions;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace personal_finance.Application.UseCases.CreateTransaction
 {
     public class CreateTransactionHandler
     {
         private readonly ITransactionRepository _repository;
+        private readonly IAccountRepository _accounts;
 
-        public CreateTransactionHandler(ITransactionRepository repository)
+        public CreateTransactionHandler(ITransactionRepository repository, IAccountRepository accounts)
         {
             _repository = repository;
+            _accounts = accounts;
         }
 
         public async Task<CreateTransactionResult> HandleAsync(CreateTransactionCommand command)
@@ -44,7 +45,7 @@ namespace personal_finance.Application.UseCases.CreateTransaction
                     ErrorCodes.TransactionInvalidCompetence);
             }
 
-            // Description 
+            // Description
             if (string.IsNullOrWhiteSpace(command.Description))
             {
                 throw ValidationException.Invalid(
@@ -52,7 +53,6 @@ namespace personal_finance.Application.UseCases.CreateTransaction
                     ErrorCodes.TransactionInvalidCompetence);
             }
 
-            // Description 
             if (command.Description.Length > 200)
             {
                 throw ValidationException.Invalid(
@@ -68,13 +68,27 @@ namespace personal_finance.Application.UseCases.CreateTransaction
                     ErrorCodes.TransactionInvalidType);
             }
 
+            // AccountId (optional for now)
+            Guid? accountId = null;
+            if (command.AccountId.HasValue)
+            {
+                var account = await _accounts.GetByIdAsync(command.AccountId.Value);
+                if (account is null)
+                {
+                    throw NotFoundException.For("Account", command.AccountId.Value);
+                }
+
+                accountId = account.Id;
+            }
+
             var transaction = new Transaction(
                 command.Amount,
                 type,
                 command.TransactionDate,
                 command.CompetenceYear,
                 command.CompetenceMonth,
-                command.Description
+                command.Description,
+                accountId
             );
 
             await _repository.AddAsync(transaction);
@@ -88,9 +102,9 @@ namespace personal_finance.Application.UseCases.CreateTransaction
                 CompetenceYear = transaction.CompetenceYear,
                 CompetenceMonth = transaction.CompetenceMonth,
                 TransactionDate = transaction.TransactionDate,
-                Description = transaction.Description
+                Description = transaction.Description,
+                AccountId = transaction.AccountId
             };
         }
-
     }
 }

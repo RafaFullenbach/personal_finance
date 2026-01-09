@@ -14,5 +14,7 @@ namespace personal_finance.Application.UseCases.CreateTransaction
         public int CompetenceMonth { get; init; }
         public DateTime TransactionDate { get; init; }
         public string Description { get; init; } = string.Empty;
+
+        public Guid? AccountId { get; init; }
     }
 }

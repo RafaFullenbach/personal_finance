@@ -1,9 +1,11 @@
 using personal_finance.API.Middleware;
 using personal_finance.Application.Interfaces;
+using personal_finance.Application.Queries.Accounts;
 using personal_finance.Application.Queries.Reports;
 using personal_finance.Application.Queries.Transactions;
 using personal_finance.Application.UseCases.CancelTransaction;
 using personal_finance.Application.UseCases.ConfirmTransaction;
+using personal_finance.Application.UseCases.CreateAccount;
 using personal_finance.Application.UseCases.CreateTransaction;
 using personal_finance.Infrastructure.Persistence.InMemory;
 
@@ -51,6 +53,14 @@ builder.Services.AddScoped<GetTransactionByIdHandler>();
 builder.Services.AddSingleton<IReportsQueryRepository, InMemoryReportsQueryRepository>();
 builder.Services.AddScoped<GetMonthlySummaryHandler>();
 builder.Services.AddScoped<GetBalanceHandler>();
+
+// Accounts (InMemory shared store)
+builder.Services.AddSingleton<InMemoryAccountRepository>();
+builder.Services.AddSingleton<IAccountRepository>(sp => sp.GetRequiredService<InMemoryAccountRepository>());
+builder.Services.AddSingleton<IAccountQueryRepository, InMemoryAccountQueryRepository>();
+
+builder.Services.AddScoped<CreateAccountHandler>();
+builder.Services.AddScoped<GetAllAccountsHandler>();
 
 var app = builder.Build();
 

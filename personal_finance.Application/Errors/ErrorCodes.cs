@@ -11,5 +11,6 @@ namespace personal_finance.Application.Errors
         public const string TransactionInvalidAmount = "TRANSACTION_INVALID_AMOUNT";
         public const string TransactionInvalidCompetence = "TRANSACTION_INVALID_COMPETENCE";
         public const string ReportInvalidPeriod = "REPORT_INVALID_PERIOD";
+        public const string AccountInvalidType = "ACCOUNT_INVALID_TYPE";
     }
 }
