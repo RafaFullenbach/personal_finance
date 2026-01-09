@@ -50,6 +50,7 @@ builder.Services.AddScoped<GetTransactionByIdHandler>();
 // Reports Query Handlers
 builder.Services.AddSingleton<IReportsQueryRepository, InMemoryReportsQueryRepository>();
 builder.Services.AddScoped<GetMonthlySummaryHandler>();
+builder.Services.AddScoped<GetBalanceHandler>();
 
 var app = builder.Build();
 
