@@ -18,7 +18,7 @@ namespace personal_finance.Domain.Entities
         public int CompetenceYear { get; private set; }
         public int CompetenceMonth { get; private set; }
         public string Description { get; private set; }
-        public Guid? AccountId { get; private set; }
+        public Guid AccountId { get; private set; }
         public Guid? TransferId { get; private set; }
 
         public Transaction(
@@ -28,7 +28,7 @@ namespace personal_finance.Domain.Entities
         int competenceYear,
         int competenceMonth,
         string description,
-        Guid? accountId = null,
+        Guid accountId,
         Guid? transferId = null)
         {
             if (amount <= 0)

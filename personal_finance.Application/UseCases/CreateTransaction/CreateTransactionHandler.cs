@@ -68,18 +68,9 @@ namespace personal_finance.Application.UseCases.CreateTransaction
                     ErrorCodes.TransactionInvalidType);
             }
 
-            // AccountId (optional for now)
-            Guid? accountId = null;
-            if (command.AccountId.HasValue)
-            {
-                var account = await _accounts.GetByIdAsync(command.AccountId.Value);
-                if (account is null)
-                {
-                    throw NotFoundException.For("Account", command.AccountId.Value);
-                }
-
-                accountId = account.Id;
-            }
+            var account = await _accounts.GetByIdAsync(command.AccountId);
+            if (account is null)
+                throw NotFoundException.For("Account", command.AccountId);
 
             var transaction = new Transaction(
                 command.Amount,
@@ -88,7 +79,7 @@ namespace personal_finance.Application.UseCases.CreateTransaction
                 command.CompetenceYear,
                 command.CompetenceMonth,
                 command.Description,
-                accountId
+                accountId: command.AccountId
             );
 
             await _repository.AddAsync(transaction);
