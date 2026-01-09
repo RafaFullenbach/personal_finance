@@ -8,20 +8,34 @@ namespace personal_finance.API.Controllers
     [ApiExplorerSettings(GroupName = "Queries")]
     public class TransactionsQueriesController : ControllerBase
     {
+        private readonly GetAllTransactionsHandler _handler;
+
+        public TransactionsQueriesController(GetAllTransactionsHandler handler)
+        {
+            _handler = handler;
+        }
+
         [HttpGet]
         public async Task<IActionResult> Get(
-             [FromQuery] int? year,
-             [FromQuery] int? month,
-             [FromQuery] string? type,
-             [FromQuery] string? status,
-             [FromServices] GetAllTransactionsHandler handler)
+            [FromQuery] int? year,
+            [FromQuery] int? month,
+            [FromQuery] string? type,
+            [FromQuery] string? status,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20,
+            [FromQuery] string? sortBy = "transactionDate",
+            [FromQuery] string? order = "desc")
         {
-            var result = await handler.HandleAsync(new GetTransactionsQuery
+            var result = await _handler.HandleAsync(new GetTransactionsQuery
             {
                 Year = year,
                 Month = month,
                 Type = type,
-                Status = status
+                Status = status,
+                Page = page,
+                PageSize = pageSize,
+                SortBy = sortBy,
+                Order = order
             });
 
             return Ok(result);

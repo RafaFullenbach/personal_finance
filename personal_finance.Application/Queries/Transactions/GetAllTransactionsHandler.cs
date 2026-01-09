@@ -1,4 +1,5 @@
 ﻿using personal_finance.Application.Interfaces;
+using personal_finance.Application.Queries.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,9 +15,7 @@ namespace personal_finance.Application.Queries.Transactions
             _queryRepository = queryRepository;
         }
 
-        public Task<IReadOnlyList<TransactionListItemDto>> HandleAsync(GetTransactionsQuery query)
-        {
-            return _queryRepository.GetAsync(query);
-        }
+        public Task<PagedResult<TransactionListItemDto>> HandleAsync(GetTransactionsQuery query)
+            => _queryRepository.GetAsync(query);
     }
 }
