@@ -9,5 +9,7 @@ namespace personal_finance.Application.Interfaces
     {
         Task<MonthlySummaryDto> GetMonthlySummaryAsync(GetMonthlySummaryQuery query);
         Task<BalanceDto> GetBalanceAsync(GetBalanceQuery query);
+
+        Task<AccountBalanceDto> GetAccountBalanceAsync(GetAccountBalanceQuery query);
     }
 }

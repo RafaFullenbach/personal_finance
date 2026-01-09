@@ -10,11 +10,14 @@ namespace personal_finance.API.Controllers
     {
         private readonly GetMonthlySummaryHandler _handler;
         private readonly GetBalanceHandler _balanceHandler;
+        private readonly GetAccountBalanceHandler _accountBalanceHandler;
 
-        public ReportsQueriesController(GetMonthlySummaryHandler handler, GetBalanceHandler balanceHandler)
+        public ReportsQueriesController(GetMonthlySummaryHandler handler, GetBalanceHandler balanceHandler, 
+            GetAccountBalanceHandler accountBalanceHandler)
         {
             _handler = handler;
             _balanceHandler = balanceHandler;
+            _accountBalanceHandler = accountBalanceHandler;
         }
 
         [HttpGet("monthly-summary")]
@@ -36,6 +39,20 @@ namespace personal_finance.API.Controllers
         {
             var result = await _balanceHandler.HandleAsync(new GetBalanceQuery
             {
+                Date = date
+            });
+
+            return Ok(result);
+        }
+
+        [HttpGet("account-balance")]
+        public async Task<IActionResult> GetAccountBalance(
+            [FromQuery] Guid accountId,
+            [FromQuery] DateTime date)
+        {
+            var result = await _accountBalanceHandler.HandleAsync(new GetAccountBalanceQuery
+            {
+                AccountId = accountId,
                 Date = date
             });
 

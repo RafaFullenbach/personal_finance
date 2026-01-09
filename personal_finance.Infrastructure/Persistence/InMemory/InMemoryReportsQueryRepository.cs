@@ -66,5 +66,34 @@ namespace personal_finance.Infrastructure.Persistence.InMemory
 
             return Task.FromResult(result);
         }
+
+        public Task<AccountBalanceDto> GetAccountBalanceAsync(GetAccountBalanceQuery query)
+        {
+            var items = _writeRepo.GetAll()
+                .Where(t =>
+                    t.AccountId.HasValue &&
+                    t.AccountId.Value == query.AccountId &&
+                    t.TransactionDate.Date <= query.Date.Date)
+                .ToList();
+
+            var totalCredits = items
+                .Where(t => t.Type == TransactionType.Credit)
+                .Sum(t => t.Amount);
+
+            var totalDebits = items
+                .Where(t => t.Type == TransactionType.Debit)
+                .Sum(t => t.Amount);
+
+            var result = new AccountBalanceDto
+            {
+                AccountId = query.AccountId,
+                Date = query.Date.Date,
+                TotalCredits = totalCredits,
+                TotalDebits = totalDebits,
+                TransactionsCount = items.Count
+            };
+
+            return Task.FromResult(result);
+        }
     }
 }
