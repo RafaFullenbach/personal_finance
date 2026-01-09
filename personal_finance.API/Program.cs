@@ -7,6 +7,7 @@ using personal_finance.Application.UseCases.CancelTransaction;
 using personal_finance.Application.UseCases.ConfirmTransaction;
 using personal_finance.Application.UseCases.CreateAccount;
 using personal_finance.Application.UseCases.CreateTransaction;
+using personal_finance.Application.UseCases.CreateTransfer;
 using personal_finance.Infrastructure.Persistence.InMemory;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,6 +45,7 @@ builder.Services.AddSingleton<ITransactionQueryRepository, InMemoryTransactionQu
 builder.Services.AddScoped<CreateTransactionHandler>();
 builder.Services.AddScoped<ConfirmTransactionHandler>();
 builder.Services.AddScoped<CancelTransactionHandler>();
+builder.Services.AddScoped<CreateTransferHandler>();
 
 // Query Handlers
 builder.Services.AddScoped<GetAllTransactionsHandler>();
