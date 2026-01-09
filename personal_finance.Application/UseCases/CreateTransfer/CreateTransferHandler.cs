@@ -1,6 +1,7 @@
 ﻿using personal_finance.Application.Errors;
 using personal_finance.Application.Exceptions;
 using personal_finance.Application.Interfaces;
+using personal_finance.Domain.Entities;
 using personal_finance.Domain.Enums;
 using System;
 using System.Collections.Generic;

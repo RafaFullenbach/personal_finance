@@ -71,8 +71,7 @@ namespace personal_finance.Infrastructure.Persistence.InMemory
         {
             var items = _writeRepo.GetAll()
                 .Where(t =>
-                    t.AccountId.HasValue &&
-                    t.AccountId.Value == query.AccountId &&
+                    t.AccountId == query.AccountId &&
                     t.TransactionDate.Date <= query.Date.Date)
                 .ToList();
 
