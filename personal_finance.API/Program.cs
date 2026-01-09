@@ -1,10 +1,11 @@
 using personal_finance.API.Middleware;
 using personal_finance.Application.Interfaces;
+using personal_finance.Application.Queries.Reports;
+using personal_finance.Application.Queries.Transactions;
 using personal_finance.Application.UseCases.CancelTransaction;
 using personal_finance.Application.UseCases.ConfirmTransaction;
 using personal_finance.Application.UseCases.CreateTransaction;
 using personal_finance.Infrastructure.Persistence.InMemory;
-using personal_finance.Application.Queries.Transactions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +47,9 @@ builder.Services.AddScoped<CancelTransactionHandler>();
 builder.Services.AddScoped<GetAllTransactionsHandler>();
 builder.Services.AddScoped<GetTransactionByIdHandler>();
 
+// Reports Query Handlers
+builder.Services.AddSingleton<IReportsQueryRepository, InMemoryReportsQueryRepository>();
+builder.Services.AddScoped<GetMonthlySummaryHandler>();
 
 var app = builder.Build();
 
