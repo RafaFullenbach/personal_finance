@@ -14,5 +14,7 @@ namespace personal_finance.Application.Queries.Transactions
         public int CompetenceYear { get; init; }
         public int CompetenceMonth { get; init; }
         public string Description { get; init; } = default!;
+
+        public Guid AccountId { get; init; }
     }
 }

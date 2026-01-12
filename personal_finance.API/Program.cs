@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using personal_finance.API.Middleware;
 using personal_finance.Application.Interfaces;
 using personal_finance.Application.Queries.Accounts;
@@ -8,12 +9,12 @@ using personal_finance.Application.UseCases.ConfirmTransaction;
 using personal_finance.Application.UseCases.CreateAccount;
 using personal_finance.Application.UseCases.CreateTransaction;
 using personal_finance.Application.UseCases.CreateTransfer;
-using personal_finance.Infrastructure.Persistence.InMemory;
+using personal_finance.Infrastructure.Persistence;
+using personal_finance.Infrastructure.Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 
 // Swagger com grupos de endpoints
@@ -22,53 +23,47 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("Commands", new() { Title = "Personal Finance API - Commands", Version = "v1" });
     c.SwaggerDoc("Queries", new() { Title = "Personal Finance API - Queries", Version = "v1" });
 
-    // Mostra só endpoints do grupo correto em cada doc
     c.DocInclusionPredicate((docName, apiDesc) =>
     {
-        // Se não tiver GroupName, cai no default (opcional)
         var groupName = apiDesc.GroupName ?? "Commands";
         return string.Equals(groupName, docName, StringComparison.OrdinalIgnoreCase);
     });
 });
 
-// Cria UMA instância compartilhada do InMemoryTransactionRepository
-builder.Services.AddSingleton<InMemoryTransactionRepository>();
+// EF Core + SQLite
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Usa a MESMA instância para escrita
-builder.Services.AddSingleton<ITransactionRepository>(sp =>
-    sp.GetRequiredService<InMemoryTransactionRepository>());
+// Repositórios EF
+builder.Services.AddScoped<ITransactionRepository, EfTransactionRepository>();
+builder.Services.AddScoped<ITransactionQueryRepository, EfTransactionQueryRepository>();
 
-// Usa a MESMA instância para leitura
-builder.Services.AddSingleton<ITransactionQueryRepository, InMemoryTransactionQueryRepository>();
+builder.Services.AddScoped<IAccountRepository, EfAccountRepository>();
+builder.Services.AddScoped<IAccountQueryRepository, EfAccountQueryRepository>();
+
+builder.Services.AddScoped<IReportsQueryRepository, EfReportsQueryRepository>();
 
 // Command Handlers
 builder.Services.AddScoped<CreateTransactionHandler>();
 builder.Services.AddScoped<ConfirmTransactionHandler>();
 builder.Services.AddScoped<CancelTransactionHandler>();
 builder.Services.AddScoped<CreateTransferHandler>();
+builder.Services.AddScoped<CreateAccountHandler>();
 
 // Query Handlers
 builder.Services.AddScoped<GetAllTransactionsHandler>();
 builder.Services.AddScoped<GetTransactionByIdHandler>();
+builder.Services.AddScoped<GetAllAccountsHandler>();
 
 // Reports Query Handlers
-builder.Services.AddSingleton<IReportsQueryRepository, InMemoryReportsQueryRepository>();
 builder.Services.AddScoped<GetMonthlySummaryHandler>();
 builder.Services.AddScoped<GetBalanceHandler>();
-
-// Accounts (InMemory shared store)
-builder.Services.AddSingleton<InMemoryAccountRepository>();
-builder.Services.AddSingleton<IAccountRepository>(sp => sp.GetRequiredService<InMemoryAccountRepository>());
-builder.Services.AddSingleton<IAccountQueryRepository, InMemoryAccountQueryRepository>();
-
-builder.Services.AddScoped<CreateAccountHandler>();
-builder.Services.AddScoped<GetAllAccountsHandler>();
+builder.Services.AddScoped<GetAccountBalanceHandler>(); // se você já tem
 
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -81,9 +76,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
