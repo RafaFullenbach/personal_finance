@@ -1,9 +1,6 @@
 ﻿using personal_finance.Application.Interfaces;
 using personal_finance.Application.Queries.Reports;
 using personal_finance.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace personal_finance.Infrastructure.Persistence.InMemory
 {
@@ -93,6 +90,44 @@ namespace personal_finance.Infrastructure.Persistence.InMemory
             };
 
             return Task.FromResult(result);
+        }
+
+        // ✅ NOVO: Category summary (InMemory)
+        // Observação: como este repo não tem acesso às categorias em memória,
+        // retornamos CategoryName/CategoryType como "Unknown" por enquanto.
+        public Task<IReadOnlyList<CategorySummaryItemDto>> GetCategorySummaryAsync(GetCategorySummaryQuery query)
+        {
+            var items = _writeRepo.GetAll()
+                .Where(t => t.CompetenceYear == query.Year && t.CompetenceMonth == query.Month)
+                .Where(t => t.CategoryId.HasValue)
+                .ToList();
+
+            var total = items.Sum(t => t.Amount);
+            if (total == 0m)
+                total = 0m;
+
+            var result = items
+                .GroupBy(t => t.CategoryId!.Value)
+                .Select(g =>
+                {
+                    var totalAmount = g.Sum(t => t.Amount);
+                    var pct = total == 0m ? 0m : (totalAmount / total) * 100m;
+
+                    return new CategorySummaryItemDto
+                    {
+                        CategoryId = g.Key,
+                        CategoryName = "Unknown",
+                        CategoryType = "Unknown",
+                        TotalAmount = totalAmount,
+                        TransactionsCount = g.Count(),
+                        Percentage = Math.Round(pct, 2)
+                    };
+                })
+                .OrderByDescending(x => x.TotalAmount)
+                .ToList()
+                .AsReadOnly();
+
+            return Task.FromResult((IReadOnlyList<CategorySummaryItemDto>)result);
         }
     }
 }

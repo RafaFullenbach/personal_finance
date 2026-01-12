@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using personal_finance.API.Middleware;
 using personal_finance.Application.Interfaces;
 using personal_finance.Application.Queries.Accounts;
+using personal_finance.Application.Queries.Budgets;
 using personal_finance.Application.Queries.Categories;
 using personal_finance.Application.Queries.Reports;
 using personal_finance.Application.Queries.Transactions;
@@ -11,6 +12,7 @@ using personal_finance.Application.UseCases.CreateAccount;
 using personal_finance.Application.UseCases.CreateCategory;
 using personal_finance.Application.UseCases.CreateTransaction;
 using personal_finance.Application.UseCases.CreateTransfer;
+using personal_finance.Application.UseCases.UpsertBudget;
 using personal_finance.Infrastructure.Persistence;
 using personal_finance.Infrastructure.Persistence.Repositories;
 
@@ -48,6 +50,9 @@ builder.Services.AddScoped<IReportsQueryRepository, EfReportsQueryRepository>();
 builder.Services.AddScoped<ICategoryRepository, EfCategoryRepository>();
 builder.Services.AddScoped<ICategoryQueryRepository, EfCategoryQueryRepository>();
 
+builder.Services.AddScoped<IBudgetRepository, EfBudgetRepository>();
+builder.Services.AddScoped<IBudgetQueryRepository, EfBudgetQueryRepository>();
+
 // Command Handlers
 builder.Services.AddScoped<CreateTransactionHandler>();
 builder.Services.AddScoped<ConfirmTransactionHandler>();
@@ -55,17 +60,20 @@ builder.Services.AddScoped<CancelTransactionHandler>();
 builder.Services.AddScoped<CreateTransferHandler>();
 builder.Services.AddScoped<CreateAccountHandler>();
 builder.Services.AddScoped<CreateCategoryHandler>();
+builder.Services.AddScoped<UpsertBudgetHandler>();
 
 // Query Handlers
 builder.Services.AddScoped<GetAllTransactionsHandler>();
 builder.Services.AddScoped<GetTransactionByIdHandler>();
 builder.Services.AddScoped<GetAllAccountsHandler>();
 builder.Services.AddScoped<GetAllCategoriesHandler>();
+builder.Services.AddScoped<GetBudgetsByMonthHandler>();
 
 // Reports Query Handlers
 builder.Services.AddScoped<GetMonthlySummaryHandler>();
 builder.Services.AddScoped<GetBalanceHandler>();
-builder.Services.AddScoped<GetAccountBalanceHandler>(); // se você já tem
+builder.Services.AddScoped<GetAccountBalanceHandler>();
+builder.Services.AddScoped<GetCategorySummaryHandler>();
 
 var app = builder.Build();
 

@@ -66,5 +66,71 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
                 TransactionsCount = count
             };
         }
+        public async Task<IReadOnlyList<CategorySummaryItemDto>> GetCategorySummaryAsync(GetCategorySummaryQuery query)
+        {
+            var tx = _db.Transactions.AsNoTracking()
+                .Where(t => t.CompetenceYear == query.Year && t.CompetenceMonth == query.Month)
+                .Where(t => t.CategoryId != null);
+
+            // filtro opcional por tipo (Expense/Income)
+            if (!string.IsNullOrWhiteSpace(query.Type) &&
+                Enum.TryParse<CategoryType>(query.Type, true, out var catType))
+            {
+                tx = tx.Join(_db.Categories.AsNoTracking(),
+                        t => t.CategoryId!.Value,
+                        c => c.Id,
+                        (t, c) => new { t, c })
+                    .Where(x => x.c.Type == catType)
+                    .Select(x => x.t);
+            }
+
+            // totals por tipo (pra % correta por Expense vs Income)
+            var baseJoin = tx.Join(_db.Categories.AsNoTracking(),
+                t => t.CategoryId!.Value,
+                c => c.Id,
+                (t, c) => new { t, c });
+
+            var totalsByType = await baseJoin
+                .GroupBy(x => x.c.Type)
+                .Select(g => new
+                {
+                    Type = g.Key,
+                    Total = g.Sum(x => x.t.Amount)
+                })
+                .ToListAsync();
+
+            var totalMap = totalsByType.ToDictionary(x => x.Type, x => x.Total);
+
+            var grouped = await baseJoin
+                .GroupBy(x => new { x.c.Id, x.c.Name, x.c.Type })
+                .Select(g => new
+                {
+                    g.Key.Id,
+                    g.Key.Name,
+                    g.Key.Type,
+                    TotalAmount = g.Sum(x => x.t.Amount),
+                    Count = g.Count()
+                })
+                .OrderByDescending(x => x.TotalAmount)
+                .ToListAsync();
+
+            var result = grouped.Select(x =>
+            {
+                var totalForType = totalMap.TryGetValue(x.Type, out var t) ? t : 0m;
+                var pct = totalForType == 0m ? 0m : (x.TotalAmount / totalForType) * 100m;
+
+                return new CategorySummaryItemDto
+                {
+                    CategoryId = x.Id,
+                    CategoryName = x.Name,
+                    CategoryType = x.Type.ToString(),
+                    TotalAmount = x.TotalAmount,
+                    TransactionsCount = x.Count,
+                    Percentage = Math.Round(pct, 2)
+                };
+            }).ToList();
+
+            return result.AsReadOnly();
+        }
     }
 }

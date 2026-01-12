@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using personal_finance.Infrastructure.Persistence;
 
@@ -10,9 +11,11 @@ using personal_finance.Infrastructure.Persistence;
 namespace personal_finance.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260112182044_AddTransactionCategoryId")]
+    partial class AddTransactionCategoryId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.1");
@@ -37,41 +40,6 @@ namespace personal_finance.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Accounts", (string)null);
-                });
-
-            modelBuilder.Entity("personal_finance.Domain.Entities.Budget", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("LimitAmount")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Month")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Year")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId", "Year", "Month")
-                        .IsUnique();
-
-                    b.ToTable("Budgets", (string)null);
                 });
 
             modelBuilder.Entity("personal_finance.Domain.Entities.Category", b =>

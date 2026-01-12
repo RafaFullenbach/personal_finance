@@ -68,10 +68,12 @@ namespace personal_finance.Application.UseCases.CreateTransaction
                     ErrorCodes.TransactionInvalidType);
             }
 
+            // Account exists
             var account = await _accounts.GetByIdAsync(command.AccountId);
             if (account is null)
                 throw NotFoundException.For("Account", command.AccountId);
 
+            // ✅ Create transaction including CategoryId (optional)
             var transaction = new Transaction(
                 command.Amount,
                 type,
@@ -79,7 +81,9 @@ namespace personal_finance.Application.UseCases.CreateTransaction
                 command.CompetenceYear,
                 command.CompetenceMonth,
                 command.Description,
-                accountId: command.AccountId
+                accountId: command.AccountId,
+                transferId: null,
+                categoryId: command.CategoryId
             );
 
             await _repository.AddAsync(transaction);
@@ -94,7 +98,8 @@ namespace personal_finance.Application.UseCases.CreateTransaction
                 CompetenceMonth = transaction.CompetenceMonth,
                 TransactionDate = transaction.TransactionDate,
                 Description = transaction.Description,
-                AccountId = transaction.AccountId
+                AccountId = transaction.AccountId,
+                CategoryId = transaction.CategoryId
             };
         }
     }

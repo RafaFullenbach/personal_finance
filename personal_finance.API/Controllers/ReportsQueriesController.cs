@@ -58,5 +58,22 @@ namespace personal_finance.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("category-summary")]
+        public async Task<IActionResult> GetCategorySummary(
+            [FromQuery] int year,
+            [FromQuery] int month,
+            [FromQuery] string? type,
+            [FromServices] GetCategorySummaryHandler handler)
+        {
+            var result = await handler.HandleAsync(new GetCategorySummaryQuery
+            {
+                Year = year,
+                Month = month,
+                Type = type
+            });
+
+            return Ok(result);
+        }
     }
 }

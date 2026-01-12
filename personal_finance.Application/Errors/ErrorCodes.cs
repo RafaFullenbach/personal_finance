@@ -15,5 +15,10 @@ namespace personal_finance.Application.Errors
         public const string TransferInvalidAccounts = "TRANSFER_INVALID_ACCOUNTS";
         public const string CategoryInvalidName = "CATEGORY_INVALID_NAME";
         public const string CategoryInvalidType = "CATEGORY_INVALID_TYPE";
+        public const string BudgetInvalidCategory = "BUDGET_CATEGORY_INVALID";
+        public const string BudgetInvalidPeriod = "BUDGET_INVALID_PERIOD";
+        public const string BudgetInvalidLimit = "BUDGET_INVALID_LIMIT";
+        public const string BudgetInvalidCategoryType = "BUDGET_INVALID_CATEGORY_TYPE";
+        
     }
 }
