@@ -1,4 +1,5 @@
 ﻿using personal_finance.Application.Interfaces;
+using personal_finance.Application.Queries.Budgets;
 using personal_finance.Application.Queries.Reports;
 using personal_finance.Domain.Enums;
 
@@ -128,6 +129,48 @@ namespace personal_finance.Infrastructure.Persistence.InMemory
                 .AsReadOnly();
 
             return Task.FromResult((IReadOnlyList<CategorySummaryItemDto>)result);
+        }
+
+        public Task<IReadOnlyList<BudgetVsActualItemDto>> GetBudgetVsActualAsync(GetBudgetVsActualQuery query)
+        {
+            // Base: transações do mês (somente Debits com CategoryId)
+            var txs = _writeRepo.GetAll()
+                .Where(t => t.CompetenceYear == query.Year && t.CompetenceMonth == query.Month)
+                .Where(t => t.Type == TransactionType.Debit)
+                .Where(t => t.CategoryId.HasValue)
+                .ToList();
+
+            // Actual por categoria
+            var actualMap = txs
+                .GroupBy(t => t.CategoryId!.Value)
+                .ToDictionary(g => g.Key, g => g.Sum(x => x.Amount));
+
+            // Budgets do mês: como InMemoryReportsQueryRepository não tem store de budgets/categorias,
+            // vamos retornar tudo como NoBudget (MVP pra compilar).
+            // Depois, se você quiser, a gente injeta InMemoryBudgetRepository + InMemoryCategoryRepository
+            // pra preencher Budget e CategoryName corretamente.
+            var result = actualMap
+                .Select(kvp =>
+                {
+                    var categoryId = kvp.Key;
+                    var actual = kvp.Value;
+
+                    return new BudgetVsActualItemDto
+                    {
+                        CategoryId = categoryId,
+                        CategoryName = "Unknown",
+                        Budget = null,
+                        Actual = actual,
+                        Difference = -actual,
+                        PercentageUsed = null,
+                        Status = "NoBudget"
+                    };
+                })
+                .OrderByDescending(x => x.Actual)
+                .ToList()
+                .AsReadOnly();
+
+            return Task.FromResult((IReadOnlyList<BudgetVsActualItemDto>)result);
         }
     }
 }

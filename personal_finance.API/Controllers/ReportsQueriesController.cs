@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using personal_finance.Application.Queries.Budgets;
 using personal_finance.Application.Queries.Reports;
 
 namespace personal_finance.API.Controllers
@@ -12,7 +13,7 @@ namespace personal_finance.API.Controllers
         private readonly GetBalanceHandler _balanceHandler;
         private readonly GetAccountBalanceHandler _accountBalanceHandler;
 
-        public ReportsQueriesController(GetMonthlySummaryHandler handler, GetBalanceHandler balanceHandler, 
+        public ReportsQueriesController(GetMonthlySummaryHandler handler, GetBalanceHandler balanceHandler,
             GetAccountBalanceHandler accountBalanceHandler)
         {
             _handler = handler;
@@ -71,6 +72,21 @@ namespace personal_finance.API.Controllers
                 Year = year,
                 Month = month,
                 Type = type
+            });
+
+            return Ok(result);
+        }
+
+        [HttpGet("budget-vs-actual")]
+        public async Task<IActionResult> GetBudgetVsActual(
+            [FromQuery] int year,
+            [FromQuery] int month,
+            [FromServices] GetBudgetVsActualHandler handler)
+        {
+            var result = await handler.HandleAsync(new GetBudgetVsActualQuery
+            {
+                Year = year,
+                Month = month
             });
 
             return Ok(result);

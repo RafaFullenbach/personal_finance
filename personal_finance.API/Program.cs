@@ -74,6 +74,7 @@ builder.Services.AddScoped<GetMonthlySummaryHandler>();
 builder.Services.AddScoped<GetBalanceHandler>();
 builder.Services.AddScoped<GetAccountBalanceHandler>();
 builder.Services.AddScoped<GetCategorySummaryHandler>();
+builder.Services.AddScoped<GetBudgetVsActualHandler>();
 
 var app = builder.Build();
 

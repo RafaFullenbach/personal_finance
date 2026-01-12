@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using personal_finance.Application.Interfaces;
+using personal_finance.Application.Queries.Budgets;
 using personal_finance.Application.Queries.Reports;
 using personal_finance.Domain.Enums;
 
@@ -47,7 +48,6 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
                 TransactionsCount = count
             };
         }
-
         public async Task<AccountBalanceDto> GetAccountBalanceAsync(GetAccountBalanceQuery query)
         {
             var q = _db.Transactions.AsNoTracking()
@@ -131,6 +131,89 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
             }).ToList();
 
             return result.AsReadOnly();
+        }
+
+        public async Task<IReadOnlyList<BudgetVsActualItemDto>> GetBudgetVsActualAsync(GetBudgetVsActualQuery query)
+        {
+            // Categories Expense (base do relatório)
+            var expenseCategories = _db.Categories.AsNoTracking()
+                .Where(c => c.IsActive && c.Type == CategoryType.Expense);
+
+            // Actual (somente Debit) agrupado por categoria
+            var actuals = await _db.Transactions.AsNoTracking()
+                .Where(t => t.CompetenceYear == query.Year && t.CompetenceMonth == query.Month)
+                .Where(t => t.CategoryId != null)
+                .Where(t => t.Type == TransactionType.Debit)
+                .GroupBy(t => t.CategoryId!.Value)
+                .Select(g => new
+                {
+                    CategoryId = g.Key,
+                    Actual = g.Sum(x => x.Amount)
+                })
+                .ToListAsync();
+
+            var actualMap = actuals.ToDictionary(x => x.CategoryId, x => x.Actual);
+
+            // Budgets do mês
+            var budgets = await _db.Budgets.AsNoTracking()
+                .Where(b => b.Year == query.Year && b.Month == query.Month && b.IsActive)
+                .Select(b => new { b.CategoryId, b.LimitAmount })
+                .ToListAsync();
+
+            var budgetMap = budgets.ToDictionary(x => x.CategoryId, x => x.LimitAmount);
+
+            // Junta tudo pela lista de categorias Expense
+            var categories = await expenseCategories
+                .Select(c => new { c.Id, c.Name })
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+
+            static string GetStatus(decimal? budget, decimal actual, decimal? pct)
+            {
+                if (budget is null) return "NoBudget";
+                if (pct is null) return "NoBudget";
+
+                if (pct < 80m) return "Ok";
+                if (pct <= 100m) return "Warning";
+                return "Exceeded";
+            }
+
+            var result = categories
+                .Select(c =>
+                {
+                    var hasActual = actualMap.TryGetValue(c.Id, out var actual);
+                    var hasBudget = budgetMap.TryGetValue(c.Id, out var budgetValue);
+
+                    decimal? budget = hasBudget ? budgetValue : (decimal?)null;
+                    decimal actualValue = hasActual ? actual : 0m;
+
+                    decimal? pct = null;
+                    if (budget.HasValue && budget.Value > 0m)
+                    {
+                        pct = Math.Round((actualValue / budget.Value) * 100m, 2);
+                    }
+
+                    var diff = budget.HasValue ? budget.Value - actualValue : -actualValue;
+
+                    return new BudgetVsActualItemDto
+                    {
+                        CategoryId = c.Id,
+                        CategoryName = c.Name,
+                        Budget = budget,
+                        Actual = actualValue,
+                        Difference = diff,
+                        PercentageUsed = pct,
+                        Status = GetStatus(budget, actualValue, pct)
+                    };
+                })
+                // Mostra primeiro quem está estourando/alerta, depois OK, depois NoBudget
+                .OrderByDescending(x => x.Status == "Exceeded")
+                .ThenByDescending(x => x.Status == "Warning")
+                .ThenByDescending(x => x.Actual)
+                .ToList()
+                .AsReadOnly();
+
+            return result;
         }
     }
 }
