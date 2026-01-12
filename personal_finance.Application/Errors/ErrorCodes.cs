@@ -13,5 +13,7 @@ namespace personal_finance.Application.Errors
         public const string ReportInvalidPeriod = "REPORT_INVALID_PERIOD";
         public const string AccountInvalidType = "ACCOUNT_INVALID_TYPE";
         public const string TransferInvalidAccounts = "TRANSFER_INVALID_ACCOUNTS";
+        public const string CategoryInvalidName = "CATEGORY_INVALID_NAME";
+        public const string CategoryInvalidType = "CATEGORY_INVALID_TYPE";
     }
 }

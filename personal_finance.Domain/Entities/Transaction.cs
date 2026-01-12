@@ -21,6 +21,8 @@ namespace personal_finance.Domain.Entities
         public Guid AccountId { get; private set; }
         public Guid? TransferId { get; private set; }
 
+        public Guid? CategoryId { get; private set; }
+
         public Transaction(
         decimal amount,
         TransactionType type,
@@ -29,7 +31,8 @@ namespace personal_finance.Domain.Entities
         int competenceMonth,
         string description,
         Guid accountId,
-        Guid? transferId = null)
+        Guid? transferId = null,
+        Guid? categoryId = null)
         {
             if (amount <= 0)
                 throw new ArgumentException("Amount must be greater than zero.");
@@ -48,6 +51,7 @@ namespace personal_finance.Domain.Entities
             Status = TransactionStatus.Pending;
             AccountId = accountId;
             TransferId = transferId;
+            CategoryId = categoryId;
         }
         public void Confirm()
         {

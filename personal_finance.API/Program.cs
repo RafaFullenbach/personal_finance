@@ -2,11 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using personal_finance.API.Middleware;
 using personal_finance.Application.Interfaces;
 using personal_finance.Application.Queries.Accounts;
+using personal_finance.Application.Queries.Categories;
 using personal_finance.Application.Queries.Reports;
 using personal_finance.Application.Queries.Transactions;
 using personal_finance.Application.UseCases.CancelTransaction;
 using personal_finance.Application.UseCases.ConfirmTransaction;
 using personal_finance.Application.UseCases.CreateAccount;
+using personal_finance.Application.UseCases.CreateCategory;
 using personal_finance.Application.UseCases.CreateTransaction;
 using personal_finance.Application.UseCases.CreateTransfer;
 using personal_finance.Infrastructure.Persistence;
@@ -43,17 +45,22 @@ builder.Services.AddScoped<IAccountQueryRepository, EfAccountQueryRepository>();
 
 builder.Services.AddScoped<IReportsQueryRepository, EfReportsQueryRepository>();
 
+builder.Services.AddScoped<ICategoryRepository, EfCategoryRepository>();
+builder.Services.AddScoped<ICategoryQueryRepository, EfCategoryQueryRepository>();
+
 // Command Handlers
 builder.Services.AddScoped<CreateTransactionHandler>();
 builder.Services.AddScoped<ConfirmTransactionHandler>();
 builder.Services.AddScoped<CancelTransactionHandler>();
 builder.Services.AddScoped<CreateTransferHandler>();
 builder.Services.AddScoped<CreateAccountHandler>();
+builder.Services.AddScoped<CreateCategoryHandler>();
 
 // Query Handlers
 builder.Services.AddScoped<GetAllTransactionsHandler>();
 builder.Services.AddScoped<GetTransactionByIdHandler>();
 builder.Services.AddScoped<GetAllAccountsHandler>();
+builder.Services.AddScoped<GetAllCategoriesHandler>();
 
 // Reports Query Handlers
 builder.Services.AddScoped<GetMonthlySummaryHandler>();
