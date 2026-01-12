@@ -2,6 +2,8 @@
 using personal_finance.Application.UseCases.CancelTransaction;
 using personal_finance.Application.UseCases.ConfirmTransaction;
 using personal_finance.Application.UseCases.CreateTransaction;
+using personal_finance.Domain.Entities;
+using personal_finance.Domain.Enums;
 using personal_finance.Domain.Exceptions;
 using personal_finance.Infrastructure.Persistence.InMemory;
 using System;
@@ -16,11 +18,16 @@ namespace personal_finance.Tests.Application
         public async Task HandleAsync_ShouldCancelTransaction_WhenPending()
         {
             var repository = new InMemoryTransactionRepository();
+            var accountsRepo = new InMemoryAccountRepository();
+
+            var account = new personal_finance.Domain.Entities.Account("Wallet", AccountType.Cash);
+            await accountsRepo.AddAsync(account);
 
             // Arrange - cria transação (Pending)
-            var createHandler = new CreateTransactionHandler(repository);
+            var createHandler = new CreateTransactionHandler(repository, accountsRepo);
             var created = await createHandler.HandleAsync(new CreateTransactionCommand
             {
+                AccountId = account.Id,
                 Amount = 100m,
                 Type = "Debit",
                 TransactionDate = DateTime.Today,
@@ -62,11 +69,16 @@ namespace personal_finance.Tests.Application
         public async Task HandleAsync_ShouldThrow_WhenTransactionAlreadyConfirmed()
         {
             var repository = new InMemoryTransactionRepository();
+            var accountsRepo = new InMemoryAccountRepository();
+
+            var account = new personal_finance.Domain.Entities.Account("Nubank", AccountType.Bank);
+            await accountsRepo.AddAsync(account);
 
             // Arrange - cria
-            var createHandler = new CreateTransactionHandler(repository);
+            var createHandler = new CreateTransactionHandler(repository, accountsRepo);
             var created = await createHandler.HandleAsync(new CreateTransactionCommand
             {
+                AccountId = account.Id,
                 Amount = 200m,
                 Type = "Credit",
                 TransactionDate = DateTime.Today,
