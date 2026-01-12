@@ -362,3 +362,13 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /personal_finance/Class.cs
+
+# SQLite
+*.db
+
+# Visual Studio backups
+*.Backup.tmp
+
+# Build
+bin/
+obj/
