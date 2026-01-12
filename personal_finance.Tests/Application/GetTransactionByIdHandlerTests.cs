@@ -1,9 +1,11 @@
-﻿using personal_finance.Application.Exceptions;
+﻿using System;
+using System.Threading.Tasks;
+using personal_finance.Application.Exceptions;
 using personal_finance.Application.Queries.Transactions;
+using personal_finance.Domain.Entities;
+using personal_finance.Domain.Enums;
 using personal_finance.Infrastructure.Persistence.InMemory;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Xunit;
 
 namespace personal_finance.Tests.Application
 {
@@ -12,14 +14,21 @@ namespace personal_finance.Tests.Application
         [Fact]
         public async Task HandleAsync_ShouldReturnTransaction_WhenExists()
         {
-            // Arrange: cria o store em memória compartilhado
+            // Arrange: cria stores em memória compartilhados
             var writeRepo = new InMemoryTransactionRepository();
+            var accountsRepo = new InMemoryAccountRepository();
             var queryRepo = new InMemoryTransactionQueryRepository(writeRepo);
 
-            // Cria uma transação via write repo (método AddAsync já existe)
-            var handlerCreate = new personal_finance.Application.UseCases.CreateTransaction.CreateTransactionHandler(writeRepo);
+            // cria uma conta válida (AccountId obrigatório)
+            var account = new Account("Wallet", AccountType.Cash);
+            await accountsRepo.AddAsync(account);
+
+            // Cria uma transação via handler de criação
+            var handlerCreate = new personal_finance.Application.UseCases.CreateTransaction.CreateTransactionHandler(writeRepo, accountsRepo);
+
             var created = await handlerCreate.HandleAsync(new personal_finance.Application.UseCases.CreateTransaction.CreateTransactionCommand
             {
+                AccountId = account.Id,
                 Amount = 100m,
                 Type = "Debit",
                 TransactionDate = DateTime.Today,
@@ -52,10 +61,8 @@ namespace personal_finance.Tests.Application
             var handler = new GetTransactionByIdHandler(queryRepo);
 
             // Act + Assert
-            await Assert.ThrowsAsync<NotFoundException>(async () =>
-            {
-                await handler.HandleAsync(new GetTransactionByIdQuery { Id = Guid.NewGuid() });
-            });
+            await Assert.ThrowsAsync<NotFoundException>(() =>
+                handler.HandleAsync(new GetTransactionByIdQuery { Id = Guid.NewGuid() }));
         }
     }
 }

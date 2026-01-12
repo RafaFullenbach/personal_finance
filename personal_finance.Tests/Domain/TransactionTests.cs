@@ -11,24 +11,30 @@ namespace personal_finance.Tests.Domain
         [Fact]
         public void Constructor_ShouldCreatePendingTransaction()
         {
+            var accountId = Guid.NewGuid();
+
             var tx = new Transaction(
                 amount: 100m,
                 type: TransactionType.Debit,
                 transactionDate: DateTime.Today,
                 competenceYear: 2026,
                 competenceMonth: 1,
-                description: "Groceries");
+                description: "Groceries",
+                accountId: accountId);
 
             Assert.NotEqual(Guid.Empty, tx.Id);
             Assert.Equal(TransactionStatus.Pending, tx.Status);
             Assert.Equal(100m, tx.Amount);
+            Assert.Equal(accountId, tx.AccountId);
             Assert.Equal(TransactionType.Debit, tx.Type);
         }
 
         [Fact]
         public void Confirm_ShouldChangeStatusToConfirmed_WhenPending()
         {
-            var tx = new Transaction(100m, TransactionType.Debit, DateTime.Today, 2026, 1, "Test");
+            var accountId = Guid.NewGuid();
+
+            var tx = new Transaction(100m, TransactionType.Debit, DateTime.Today, 2026, 1, "Test", accountId);
 
             tx.Confirm();
 
@@ -38,7 +44,9 @@ namespace personal_finance.Tests.Domain
         [Fact]
         public void Cancel_ShouldChangeStatusToCancelled_WhenPending()
         {
-            var tx = new Transaction(100m, TransactionType.Debit, DateTime.Today, 2026, 1, "Test");
+            var accountId = Guid.NewGuid();
+
+            var tx = new Transaction(100m, TransactionType.Debit, DateTime.Today, 2026, 1, "Test", accountId);
 
             tx.Cancel();
 
@@ -48,7 +56,9 @@ namespace personal_finance.Tests.Domain
         [Fact]
         public void Confirm_ShouldThrow_WhenNotPending()
         {
-            var tx = new Transaction(100m, TransactionType.Debit, DateTime.Today, 2026, 1, "Test");
+            var accountId = Guid.NewGuid();
+
+            var tx = new Transaction(100m, TransactionType.Debit, DateTime.Today, 2026, 1, "Test", accountId);
             tx.Cancel();
 
             Assert.Throws<InvalidOperationException>(() => tx.Confirm());

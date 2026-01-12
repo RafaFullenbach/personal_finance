@@ -1,6 +1,8 @@
-﻿using personal_finance.Application.UseCases.CreateTransaction;
+﻿using personal_finance.Application.Exceptions;
+using personal_finance.Application.UseCases.CreateTransaction;
+using personal_finance.Domain.Entities;
+using personal_finance.Domain.Enums;
 using personal_finance.Infrastructure.Persistence.InMemory;
-using personal_finance.Application.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,10 +15,16 @@ namespace personal_finance.Tests.Application
         public async Task HandleAsync_ShouldCreateTransaction_AsPending()
         {
             var repo = new InMemoryTransactionRepository();
-            var handler = new CreateTransactionHandler(repo);
+            var accountsRepo = new InMemoryAccountRepository();
+
+            var account = new Account("Wallet", AccountType.Cash);
+            await accountsRepo.AddAsync(account);
+
+            var handler = new CreateTransactionHandler(repo, accountsRepo);
 
             var result = await handler.HandleAsync(new CreateTransactionCommand
             {
+                AccountId = account.Id,
                 Amount = 150m,
                 Type = "Debit",
                 TransactionDate = DateTime.Today,
@@ -35,12 +43,18 @@ namespace personal_finance.Tests.Application
         public async Task HandleAsync_ShouldThrowValidationException_WhenAmountIsZeroOrNegative()
         {
             var repo = new InMemoryTransactionRepository();
-            var handler = new CreateTransactionHandler(repo);
+            var accountsRepo = new InMemoryAccountRepository();
+
+            var account = new Account("Wallet", AccountType.Cash);
+            await accountsRepo.AddAsync(account);
+
+            var handler = new CreateTransactionHandler(repo, accountsRepo);
 
             var ex = await Assert.ThrowsAsync<ValidationException>(async () =>
             {
                 await handler.HandleAsync(new CreateTransactionCommand
                 {
+                    AccountId = account.Id,
                     Amount = 0m,
                     Type = "Debit",
                     TransactionDate = DateTime.Today,
@@ -57,12 +71,18 @@ namespace personal_finance.Tests.Application
         public async Task HandleAsync_ShouldThrowValidationException_WhenCompetenceMonthIsOutOfRange()
         {
             var repo = new InMemoryTransactionRepository();
-            var handler = new CreateTransactionHandler(repo);
+            var accountsRepo = new InMemoryAccountRepository();
+
+            var account = new Account("Wallet", AccountType.Cash);
+            await accountsRepo.AddAsync(account);
+
+            var handler = new CreateTransactionHandler(repo, accountsRepo);
 
             var ex = await Assert.ThrowsAsync<ValidationException>(async () =>
             {
                 await handler.HandleAsync(new CreateTransactionCommand
                 {
+                    AccountId = account.Id,
                     Amount = 10m,
                     Type = "Debit",
                     TransactionDate = DateTime.Today,
