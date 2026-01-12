@@ -49,6 +49,9 @@ namespace personal_finance.Infrastructure.Persistence.Configurations
             builder.HasIndex(x => x.AccountId);
             builder.HasIndex(x => x.TransferId);
             builder.HasIndex(x => x.TransactionDate);
+
+            builder.Property(x => x.CategoryId).IsRequired(false);
+            builder.HasIndex(x => x.CategoryId);
         }
     }
 }
