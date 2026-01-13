@@ -1,120 +1,63 @@
-# \# Personal Finance API
+# Personal Finance API
 
-# 
+API para controle financeiro pessoal com foco em **boas práticas de backend em C#**: Clean Architecture, CQRS, EF Core + SQLite, validações consistentes e fluxo contábil (competência + fechamento mensal).
 
-# Backend de um sistema pessoal de finanças, com foco em aprendizado e boas práticas de backend C#:
+---
 
-# \*\*Clean Architecture\*\*, \*\*CQRS\*\*, \*\*DDD (na medida)\*\*, \*\*SOLID\*\*, \*\*EF Core + SQLite\*\*, Swagger organizado por grupos e regras contábeis básicas (competência, fechamento mensal).
+## Stack
 
-# 
+- **.NET** (ASP.NET Core)
+- **EF Core** + **SQLite**
+- **Swagger/OpenAPI** (endpoints agrupados por Commands/Queries)
+- **xUnit** (testes)
 
-# ---
+---
 
-# 
+## Arquitetura
 
-# \## ✨ Features
+Estrutura em camadas (Clean Architecture):
 
-# 
+- `personal_finance.Domain`  
+  Entidades e regras de negócio (ex.: `Transaction`, `Budget`, `MonthClosing`)
+- `personal_finance.Application`  
+  Casos de uso (Commands), Queries (CQRS), interfaces (ports), validações e erros
+- `personal_finance.Infrastructure`  
+  Persistência (EF Core), repositórios, `AppDbContext`, migrations
+- `personal_finance.API`  
+  Controllers, DI, Swagger, middleware de exceções
+- `personal_finance.Tests`  
+  Testes unitários (Domain + Application)
 
-# \### Core
+---
 
-# \- \*\*Accounts\*\*: contas (ex: Nubank Corrente, Nubank Investimentos, Caixinhas)
+## Funcionalidades
 
-# \- \*\*Categories\*\*: categorias para receitas/despesas
+- **Accounts**: cadastro e consulta de contas
+- **Categories**: categorias de receita/despesa
+- **Transactions**:
+  - criação de lançamentos (crédito/débito)
+  - confirmação/cancelamento
+  - filtros/paginação/ordenção em consultas
+- **Budgets** (orçamento mensal por categoria):
+  - *upsert* (cria/atualiza)
+  - restrição para categorias de despesa (Expense)
+- **Reports**:
+  - resumo mensal
+  - saldo geral e por conta
+  - por categoria
+  - **budget vs actual**
+- **Recurring**: base para geração mensal de lançamentos recorrentes
+- **Month Close**:
+  - fechamento mensal com auto-confirmação opcional
+  - bloqueio de operações em competência fechada
 
-# \- \*\*Transactions\*\*:
+---
 
-# &nbsp; - criação de lançamentos (crédito/débito)
+## Executar localmente
 
-# &nbsp; - confirmação e cancelamento
+### Pré-requisitos
+- .NET SDK instalado
+- EF Core Tools (se necessário)
 
-# &nbsp; - suporte a `AccountId` e `CategoryId` (quando aplicável)
-
-# &nbsp; - filtros, ordenação e paginação nas consultas
-
-# \- \*\*Budgets\*\* (Orçamento por categoria/mês):
-
-# &nbsp; - \*upsert\* (cria se não existir / atualiza se existir)
-
-# &nbsp; - restrição: orçamento só para categorias de despesa (Expense)
-
-# \- \*\*Reports\*\*:
-
-# &nbsp; - resumo mensal (credits/debits)
-
-# &nbsp; - saldo geral
-
-# &nbsp; - saldo por conta
-
-# &nbsp; - resumo por categoria
-
-# &nbsp; - budget vs actual
-
-# \- \*\*Recurring Transactions\*\* (transações recorrentes): base para gerar lançamentos por competência
-
-# \- \*\*Month Close (Fechamento Mensal)\*\*:
-
-# &nbsp; - fecha um mês e (opcionalmente) confirma transações pendentes
-
-# &nbsp; - bloqueia criação/alteração em competência fechada
-
-# 
-
-# ---
-
-# 
-
-# \## 🧱 Arquitetura
-
-# 
-
-# Estrutura em camadas:
-
-# 
-
-# \- `personal\_finance.Domain`
-
-# &nbsp; - entidades e regras de negócio (ex: `Transaction`, `Budget`, `MonthClosing`)
-
-# \- `personal\_finance.Application`
-
-# &nbsp; - casos de uso (Commands/UseCases), Queries (CQRS), interfaces (ports), exceptions e erros
-
-# &nbsp; - `Services/Guards` contém regras reutilizáveis (ex: `MonthCloseGuard`)
-
-# \- `personal\_finance.Infrastructure`
-
-# &nbsp; - EF Core, SQLite, repositórios (implementações), `AppDbContext`, migrations
-
-# \- `personal\_finance.API`
-
-# &nbsp; - controllers, DI, swagger, middleware de tratamento de erros
-
-# \- `personal\_finance.Tests`
-
-# &nbsp; - testes unitários (Domain + Application)
-
-# 
-
-# ---
-
-# 
-
-# \## ✅ Requisitos
-
-# 
-
-# \- .NET SDK (recomendado: versão LTS usada no projeto)
-
-# \- EF Core Tools (`dotnet-ef`) instalado
-
-# 
-
-# Instalar EF Tools (se necessário):
-
-# ```bash
-
-# dotnet tool install --global dotnet-ef
-
-
-
+```bash
+dotnet tool install --global dotnet-ef
