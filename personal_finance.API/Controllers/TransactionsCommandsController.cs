@@ -8,7 +8,7 @@ namespace personal_finance.API.Controllers
     [ApiController]
     [Route("transactions")]
     [ApiExplorerSettings(GroupName = "Commands")]
-    public class TransactionsController : ControllerBase
+    public class TransactionsCommandsController : ControllerBase
     {
         [HttpPost]
         public async Task<IActionResult> Create(

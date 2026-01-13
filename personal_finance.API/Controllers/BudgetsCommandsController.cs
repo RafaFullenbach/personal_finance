@@ -7,7 +7,7 @@ namespace personal_finance.API.Controllers
     [ApiController]
     [Route("budgets")]
     [ApiExplorerSettings(GroupName = "Commands")]
-    public class BudgetsController : ControllerBase
+    public class BudgetsCommandsController : ControllerBase
     {
         [HttpPost]
         public async Task<IActionResult> Upsert(
@@ -15,22 +15,6 @@ namespace personal_finance.API.Controllers
             [FromServices] UpsertBudgetHandler handler)
         {
             var result = await handler.HandleAsync(command);
-            return Ok(result);
-        }
-    }
-
-    [ApiController]
-    [Route("budgets")]
-    [ApiExplorerSettings(GroupName = "Queries")]
-    public class BudgetsQueryController : ControllerBase
-    {
-        [HttpGet]
-        public async Task<IActionResult> GetByMonth(
-            [FromQuery] int year,
-            [FromQuery] int month,
-            [FromServices] GetBudgetsByMonthHandler handler)
-        {
-            var result = await handler.HandleAsync(year, month);
             return Ok(result);
         }
     }

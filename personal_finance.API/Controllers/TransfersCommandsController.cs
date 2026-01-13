@@ -6,11 +6,11 @@ namespace personal_finance.API.Controllers
     [ApiController]
     [Route("transfers")]
     [ApiExplorerSettings(GroupName = "Commands")]
-    public class TransfersController : ControllerBase
+    public class TransfersCommandsController : ControllerBase
     {
         private readonly CreateTransferHandler _handler;
 
-        public TransfersController(CreateTransferHandler handler)
+        public TransfersCommandsController(CreateTransferHandler handler)
         {
             _handler = handler;
         }
