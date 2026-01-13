@@ -20,8 +20,8 @@ namespace personal_finance.Domain.Entities
         public string Description { get; private set; }
         public Guid AccountId { get; private set; }
         public Guid? TransferId { get; private set; }
-
         public Guid? CategoryId { get; private set; }
+        public Guid? RecurringTemplateId { get; private set; }
 
         public Transaction(
         decimal amount,
@@ -32,7 +32,8 @@ namespace personal_finance.Domain.Entities
         string description,
         Guid accountId,
         Guid? transferId = null,
-        Guid? categoryId = null)
+        Guid? categoryId = null,
+        Guid? recurringTemplateId = null)
         {
             if (amount <= 0)
                 throw new ArgumentException("Amount must be greater than zero.");
@@ -52,6 +53,7 @@ namespace personal_finance.Domain.Entities
             AccountId = accountId;
             TransferId = transferId;
             CategoryId = categoryId;
+            RecurringTemplateId = recurringTemplateId;
         }
         public void Confirm()
         {

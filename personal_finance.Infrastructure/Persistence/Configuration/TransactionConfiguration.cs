@@ -52,6 +52,9 @@ namespace personal_finance.Infrastructure.Persistence.Configurations
 
             builder.Property(x => x.CategoryId).IsRequired(false);
             builder.HasIndex(x => x.CategoryId);
+
+            builder.Property(x => x.RecurringTemplateId).IsRequired(false);
+            builder.HasIndex(x => x.RecurringTemplateId);
         }
     }
 }
