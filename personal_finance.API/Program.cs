@@ -7,6 +7,7 @@ using personal_finance.Application.Queries.Categories;
 using personal_finance.Application.Queries.Recurring;
 using personal_finance.Application.Queries.Reports;
 using personal_finance.Application.Queries.Transactions;
+using personal_finance.Application.Services;
 using personal_finance.Application.UseCases.CancelTransaction;
 using personal_finance.Application.UseCases.CloseMonth;
 using personal_finance.Application.UseCases.ConfirmTransaction;
@@ -88,6 +89,9 @@ builder.Services.AddScoped<GetBalanceHandler>();
 builder.Services.AddScoped<GetAccountBalanceHandler>();
 builder.Services.AddScoped<GetCategorySummaryHandler>();
 builder.Services.AddScoped<GetBudgetVsActualHandler>();
+
+// Application Services
+builder.Services.AddScoped<MonthCloseGuard>();
 
 var app = builder.Build();
 

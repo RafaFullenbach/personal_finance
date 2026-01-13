@@ -23,5 +23,6 @@ namespace personal_finance.Application.Errors
         public const string RecurringInvalidType = "RECURRING_INVALID_TYPE";
         public const string RecurringInvalidPeriod = "RECURRING_INVALID_PERIOD";
         public const string MonthCloseInvalidPeriod = "MONTH_CLOSE_INVALID_PERIOD";
+        public const string MonthClosed = "MONTH_CLOSED";
     }
 }

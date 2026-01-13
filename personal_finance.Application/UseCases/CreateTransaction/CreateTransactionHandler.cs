@@ -12,11 +12,16 @@ namespace personal_finance.Application.UseCases.CreateTransaction
     {
         private readonly ITransactionRepository _repository;
         private readonly IAccountRepository _accounts;
+        private readonly IMonthClosingRepository _monthClosings;
 
-        public CreateTransactionHandler(ITransactionRepository repository, IAccountRepository accounts)
+        public CreateTransactionHandler(
+            ITransactionRepository repository,
+            IAccountRepository accounts,
+            IMonthClosingRepository monthClosings)
         {
             _repository = repository;
             _accounts = accounts;
+            _monthClosings = monthClosings;
         }
 
         public async Task<CreateTransactionResult> HandleAsync(CreateTransactionCommand command)
@@ -43,6 +48,15 @@ namespace personal_finance.Application.UseCases.CreateTransaction
                 throw ValidationException.Invalid(
                     $"CompetenceYear '{command.CompetenceYear}' is out of range.",
                     ErrorCodes.TransactionInvalidCompetence);
+            }
+
+            // ✅ Block create if month is closed
+            var closing = await _monthClosings.GetByPeriodAsync(command.CompetenceYear, command.CompetenceMonth);
+            if (closing is not null)
+            {
+                throw ValidationException.Invalid(
+                    $"Month {command.CompetenceYear:D4}-{command.CompetenceMonth:D2} is closed.",
+                    ErrorCodes.MonthClosed);
             }
 
             // Description
@@ -73,7 +87,7 @@ namespace personal_finance.Application.UseCases.CreateTransaction
             if (account is null)
                 throw NotFoundException.For("Account", command.AccountId);
 
-            // ✅ Create transaction including CategoryId (optional)
+            // Create transaction including CategoryId (optional)
             var transaction = new Transaction(
                 command.Amount,
                 type,
