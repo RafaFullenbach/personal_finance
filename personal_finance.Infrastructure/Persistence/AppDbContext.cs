@@ -15,6 +15,7 @@ namespace personal_finance.Infrastructure.Persistence
         public DbSet<Category> Categories => Set<Category>();
         public DbSet<Budget> Budgets => Set<Budget>();
         public DbSet<RecurringTransactionTemplate> RecurringTransactionTemplates => Set<RecurringTransactionTemplate>();
+        public DbSet<MonthClosing> MonthClosings => Set<MonthClosing>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);

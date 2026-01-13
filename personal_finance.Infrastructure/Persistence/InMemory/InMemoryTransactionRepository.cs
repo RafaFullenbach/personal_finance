@@ -52,5 +52,15 @@ namespace personal_finance.Infrastructure.Persistence.InMemory
 
             return Task.FromResult(exists);
         }
+
+        public Task<IReadOnlyList<Transaction>> GetByCompetenceAsync(int year, int month)
+        {
+            var list = _store.Values
+                .Where(t => t.CompetenceYear == year && t.CompetenceMonth == month)
+                .ToList()
+                .AsReadOnly();
+
+            return Task.FromResult((IReadOnlyList<Transaction>)list);
+        }
     }
 }

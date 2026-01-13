@@ -34,5 +34,14 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
                 t.CompetenceYear == year &&
                 t.CompetenceMonth == month);
         }
+
+        public async Task<IReadOnlyList<Transaction>> GetByCompetenceAsync(int year, int month)
+        {
+            var list = await _db.Transactions
+                .Where(t => t.CompetenceYear == year && t.CompetenceMonth == month)
+                .ToListAsync();
+
+            return list.AsReadOnly();
+        }
     }
 }

@@ -9,13 +9,13 @@ namespace personal_finance.API.Controllers
     [ApiExplorerSettings(GroupName = "Commands")]
     public class BudgetsCommandsController : ControllerBase
     {
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> Upsert(
-            [FromBody] UpsertBudgetCommand command,
-            [FromServices] UpsertBudgetHandler handler)
+         [FromBody] UpsertBudgetCommand command,
+         [FromServices] UpsertBudgetHandler handler)
         {
             var result = await handler.HandleAsync(command);
-            return Ok(result);
+            return Ok(result); // retorna Created/Updated no Action
         }
     }
 }

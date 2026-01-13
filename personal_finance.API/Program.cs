@@ -8,6 +8,7 @@ using personal_finance.Application.Queries.Recurring;
 using personal_finance.Application.Queries.Reports;
 using personal_finance.Application.Queries.Transactions;
 using personal_finance.Application.UseCases.CancelTransaction;
+using personal_finance.Application.UseCases.CloseMonth;
 using personal_finance.Application.UseCases.ConfirmTransaction;
 using personal_finance.Application.UseCases.CreateAccount;
 using personal_finance.Application.UseCases.CreateCategory;
@@ -59,6 +60,8 @@ builder.Services.AddScoped<IBudgetQueryRepository, EfBudgetQueryRepository>();
 builder.Services.AddScoped<IRecurringTemplateRepository, EfRecurringTemplateRepository>();
 builder.Services.AddScoped<IRecurringTemplateQueryRepository, EfRecurringTemplateQueryRepository>();
 
+builder.Services.AddScoped<IMonthClosingRepository, EfMonthClosingRepository>();
+
 // Command Handlers
 builder.Services.AddScoped<CreateTransactionHandler>();
 builder.Services.AddScoped<ConfirmTransactionHandler>();
@@ -69,6 +72,7 @@ builder.Services.AddScoped<CreateCategoryHandler>();
 builder.Services.AddScoped<UpsertBudgetHandler>();
 builder.Services.AddScoped<CreateRecurringTemplateHandler>();
 builder.Services.AddScoped<GenerateRecurringTransactionsHandler>();
+builder.Services.AddScoped<CloseMonthHandler>();
 
 // Query Handlers
 builder.Services.AddScoped<GetAllTransactionsHandler>();

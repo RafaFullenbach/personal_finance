@@ -54,7 +54,8 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
                     CompetenceYear = t.CompetenceYear,
                     CompetenceMonth = t.CompetenceMonth,
                     Description = t.Description,
-                    AccountId = t.AccountId
+                    AccountId = t.AccountId,
+                    RecurringTemplateId = t.RecurringTemplateId,
                 })
                 .ToListAsync();
 
@@ -81,7 +82,8 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
                     CompetenceYear = t.CompetenceYear,
                     CompetenceMonth = t.CompetenceMonth,
                     Description = t.Description,
-                    AccountId = t.AccountId
+                    AccountId = t.AccountId,
+                    RecurringTemplateId = t.RecurringTemplateId,
                 })
                 .FirstOrDefaultAsync();
         }

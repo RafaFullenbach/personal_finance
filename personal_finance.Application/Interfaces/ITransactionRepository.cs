@@ -14,5 +14,7 @@ namespace personal_finance.Application.Interfaces
         Task UpdateAsync(Transaction transaction);
 
         Task<bool> ExistsForRecurringAsync(Guid recurringTemplateId, int year, int month);
+
+        Task<IReadOnlyList<Transaction>> GetByCompetenceAsync(int year, int month);
     }
 }
