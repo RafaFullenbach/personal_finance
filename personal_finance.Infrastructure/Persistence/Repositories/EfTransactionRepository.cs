@@ -26,5 +26,13 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
             _db.Transactions.Update(transaction);
             await _db.SaveChangesAsync();
         }
+
+        public Task<bool> ExistsForRecurringAsync(Guid recurringTemplateId, int year, int month)
+        {
+            return _db.Transactions.AsNoTracking().AnyAsync(t =>
+                t.RecurringTemplateId == recurringTemplateId &&
+                t.CompetenceYear == year &&
+                t.CompetenceMonth == month);
+        }
     }
 }

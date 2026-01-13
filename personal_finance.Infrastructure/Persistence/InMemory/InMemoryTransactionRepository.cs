@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using personal_finance.Application.Interfaces;
 using personal_finance.Domain.Entities;
@@ -38,6 +40,17 @@ namespace personal_finance.Infrastructure.Persistence.InMemory
         public Transaction? GetById(Guid id)
         {
             return _store.TryGetValue(id, out var t) ? t : null;
+        }
+
+        public Task<bool> ExistsForRecurringAsync(Guid recurringTemplateId, int year, int month)
+        {
+            var exists = _store.Values.Any(t =>
+                t.RecurringTemplateId.HasValue &&
+                t.RecurringTemplateId.Value == recurringTemplateId &&
+                t.CompetenceYear == year &&
+                t.CompetenceMonth == month);
+
+            return Task.FromResult(exists);
         }
     }
 }
