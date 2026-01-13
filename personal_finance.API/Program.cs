@@ -7,7 +7,7 @@ using personal_finance.Application.Queries.Categories;
 using personal_finance.Application.Queries.Recurring;
 using personal_finance.Application.Queries.Reports;
 using personal_finance.Application.Queries.Transactions;
-using personal_finance.Application.Services;
+using personal_finance.Application.Services.Guards;
 using personal_finance.Application.UseCases.CancelTransaction;
 using personal_finance.Application.UseCases.CloseMonth;
 using personal_finance.Application.UseCases.ConfirmTransaction;

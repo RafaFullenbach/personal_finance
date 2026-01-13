@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace personal_finance.Application.Services
+namespace personal_finance.Application.Services.Guards
 {
     public sealed class MonthCloseGuard
     {
