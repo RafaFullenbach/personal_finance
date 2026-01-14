@@ -26,6 +26,22 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
+// CORS (DEV)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("DevCors", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://localhost:4200",
+                "https://localhost:4200"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        // .AllowCredentials(); // só se no futuro usar cookies/auth
+    });
+});
+
 // Swagger com grupos de endpoints
 builder.Services.AddSwaggerGen(c =>
 {
@@ -106,6 +122,12 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/Commands/swagger.json", "Commands");
         c.SwaggerEndpoint("/swagger/Queries/swagger.json", "Queries");
     });
+}
+
+// CORS deve vir antes de Authorization/MapControllers
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors("DevCors");
 }
 
 app.UseHttpsRedirection();
