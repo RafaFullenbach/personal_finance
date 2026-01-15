@@ -2,6 +2,7 @@
 using personal_finance.Application.Interfaces;
 using personal_finance.Application.Queries.Common;
 using personal_finance.Application.Queries.Transactions;
+using personal_finance.Domain.Enums;
 
 namespace personal_finance.Infrastructure.Persistence.Repositories
 {
@@ -21,16 +22,26 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
             if (query.Month.HasValue)
                 q = q.Where(t => t.CompetenceMonth == query.Month.Value);
 
+            // ✅ Type filter (SEM ToString no EF)
             if (!string.IsNullOrWhiteSpace(query.Type))
-                q = q.Where(t => t.Type.ToString().Equals(query.Type, StringComparison.OrdinalIgnoreCase));
+            {
+                // Aqui assume que já veio validado no handler
+                Enum.TryParse<TransactionType>(query.Type, true, out var typeEnum);
+                q = q.Where(t => t.Type == typeEnum);
+            }
 
+            // ✅ Status filter (SEM ToString no EF)
             if (!string.IsNullOrWhiteSpace(query.Status))
-                q = q.Where(t => t.Status.ToString().Equals(query.Status, StringComparison.OrdinalIgnoreCase));
+            {
+                // Aqui assume que já veio validado no handler
+                Enum.TryParse<TransactionStatus>(query.Status, true, out var statusEnum);
+                q = q.Where(t => t.Status == statusEnum);
+            }
 
             var total = await q.CountAsync();
 
             var desc = string.Equals(query.Order, "desc", StringComparison.OrdinalIgnoreCase);
-            var sortBy = (query.SortBy ?? "transactionDate").ToLowerInvariant();
+            var sortBy = (query.SortBy ?? "transactionDate").Trim().ToLowerInvariant();
 
             q = sortBy switch
             {
