@@ -16,6 +16,9 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
         {
             var q = _db.Transactions.AsNoTracking().AsQueryable();
 
+            if (!query.IncludeTransfers)
+                q = q.Where(t => t.TransferId == null);
+
             if (query.Year.HasValue)
                 q = q.Where(t => t.CompetenceYear == query.Year.Value);
 

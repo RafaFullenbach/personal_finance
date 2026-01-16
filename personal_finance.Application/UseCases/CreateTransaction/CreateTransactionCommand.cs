@@ -14,6 +14,5 @@ namespace personal_finance.Application.UseCases.CreateTransaction
         public string Description { get; init; } = string.Empty;
         public Guid AccountId { get; init; }
         public Guid? CategoryId { get; init; }
-
     }
 }

@@ -24,7 +24,9 @@ namespace personal_finance.API.Controllers
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 20,
             [FromQuery] string? sortBy = "transactionDate",
-            [FromQuery] string? order = "desc")
+            [FromQuery] string? order = "desc",
+            [FromQuery] bool includeTransfers = false)
+
         {
             var result = await _handler.HandleAsync(new GetTransactionsQuery
             {
@@ -35,7 +37,8 @@ namespace personal_finance.API.Controllers
                 Page = page,
                 PageSize = pageSize,
                 SortBy = sortBy,
-                Order = order
+                Order = order,
+                IncludeTransfers = includeTransfers,
             });
 
             return Ok(result);
