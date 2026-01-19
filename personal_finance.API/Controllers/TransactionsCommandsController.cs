@@ -2,6 +2,7 @@
 using personal_finance.Application.UseCases.CancelTransaction;
 using personal_finance.Application.UseCases.ConfirmTransaction;
 using personal_finance.Application.UseCases.CreateTransaction;
+using personal_finance.Application.UseCases.UpdateTransaction;
 
 namespace personal_finance.API.Controllers
 {
@@ -44,5 +45,28 @@ namespace personal_finance.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Update(
+            [FromRoute] Guid id,
+            [FromBody] UpdateTransactionCommand command,
+            [FromServices] UpdateTransactionHandler handler)
+        {
+            var result = await handler.HandleAsync(new UpdateTransactionCommand
+            {
+                Id = id,
+                Amount = command.Amount,
+                Type = command.Type,
+                TransactionDate = command.TransactionDate,
+                CompetenceYear = command.CompetenceYear,
+                CompetenceMonth = command.CompetenceMonth,
+                Description = command.Description,
+                AccountId = command.AccountId,
+                CategoryId = command.CategoryId
+            });
+
+            return Ok(result);
+        }
+
     }
 }

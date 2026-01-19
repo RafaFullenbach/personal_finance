@@ -17,6 +17,7 @@ using personal_finance.Application.UseCases.CreateRecurringTemplate;
 using personal_finance.Application.UseCases.CreateTransaction;
 using personal_finance.Application.UseCases.CreateTransfer;
 using personal_finance.Application.UseCases.GenerateRecurringTransactions;
+using personal_finance.Application.UseCases.UpdateTransaction;
 using personal_finance.Application.UseCases.UpsertBudget;
 using personal_finance.Infrastructure.Persistence;
 using personal_finance.Infrastructure.Persistence.Repositories;
@@ -90,6 +91,7 @@ builder.Services.AddScoped<UpsertBudgetHandler>();
 builder.Services.AddScoped<CreateRecurringTemplateHandler>();
 builder.Services.AddScoped<GenerateRecurringTransactionsHandler>();
 builder.Services.AddScoped<CloseMonthHandler>();
+builder.Services.AddScoped<UpdateTransactionHandler>();
 
 // Query Handlers
 builder.Services.AddScoped<GetAllTransactionsHandler>();

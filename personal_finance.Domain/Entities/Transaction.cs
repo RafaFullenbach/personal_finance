@@ -71,5 +71,43 @@ namespace personal_finance.Domain.Entities
 
             Status = TransactionStatus.Cancelled;
         }
+
+        public void Update(
+        decimal amount,
+        TransactionType type,
+        DateTime transactionDate,
+        int competenceYear,
+        int competenceMonth,
+        string description,
+        Guid accountId,
+        Guid? categoryId)
+        {
+            if (Status != TransactionStatus.Pending)
+                throw new InvalidOperationException("Only pending transactions can be edited.");
+
+            if (amount <= 0)
+                throw new ArgumentException("Amount must be greater than zero.");
+
+            if (competenceMonth < 1 || competenceMonth > 12)
+                throw new ArgumentException("Invalid competence month.");
+
+            if (competenceYear < 2000 || competenceYear > 2100)
+                throw new ArgumentException("Invalid competence year.");
+
+            if (string.IsNullOrWhiteSpace(description))
+                throw new ArgumentException("Description is required.");
+
+            if (description.Length > 200)
+                throw new ArgumentException("Description must be 200 characters or less.");
+
+            Amount = amount;
+            Type = type;
+            TransactionDate = transactionDate;
+            CompetenceYear = competenceYear;
+            CompetenceMonth = competenceMonth;
+            Description = description;
+            AccountId = accountId;
+            CategoryId = categoryId;
+        }
     }
 }

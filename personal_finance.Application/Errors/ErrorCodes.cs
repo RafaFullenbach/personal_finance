@@ -11,9 +11,10 @@ namespace personal_finance.Application.Errors
         public const string TransactionInvalidType = "TRANSACTION_INVALID_TYPE";
         public const string TransactionInvalidAmount = "TRANSACTION_INVALID_AMOUNT";
         public const string TransactionInvalidCompetence = "TRANSACTION_INVALID_COMPETENCE";
-        public const string TransactionInvalidStatus = "transaction_invalid_status";
-        public const string QueryInvalidPagination = "query_invalid_pagination";
-        public const string QueryInvalidSort = "query_invalid_sort";
+        public const string TransactionInvalidStatus = "TRANSACTION_INVALID_STATUS";
+        public const string QueryInvalidPagination = "QUERY_INVALID_PAGINATION";
+        public const string QueryInvalidSort = "QUERY_INVALID_SORT";
+        public const string TransactionInvalidUpdate = "TRANSACTION_INVALID_UPDATE";
 
         //Reports
         public const string ReportInvalidPeriod = "REPORT_INVALID_PERIOD";
