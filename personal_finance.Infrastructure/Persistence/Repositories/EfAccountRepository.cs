@@ -20,5 +20,11 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
         {
             return _db.Accounts.FirstOrDefaultAsync(x => x.Id == id);
         }
+
+        public async Task UpdateAsync(Account account)
+        {
+            _db.Accounts.Update(account);
+            await _db.SaveChangesAsync();
+        }
     }
 }

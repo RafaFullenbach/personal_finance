@@ -17,6 +17,12 @@ namespace personal_finance.Infrastructure.Persistence.InMemory
             return Task.CompletedTask;
         }
 
+        public Task UpdateAsync(Account account)
+        {
+            _store[account.Id] = account;
+            return Task.CompletedTask;
+        }
+
         public Task<Account?> GetByIdAsync(Guid id)
         {
             _store.TryGetValue(id, out var account);

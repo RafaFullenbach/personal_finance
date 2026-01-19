@@ -22,7 +22,9 @@ namespace personal_finance.Application.Errors
         //Accounts
         public const string AccountInvalidType = "ACCOUNT_INVALID_TYPE";
         public const string TransferInvalidAccounts = "TRANSFER_INVALID_ACCOUNTS";
-
+        public const string AccountInvalidId = "ACCOUNT_INVALID_ID";
+        public const string AccountInvalidName = "ACCOUNT_INVALID_NAME";
+        
         //Categories
         public const string CategoryInvalidName = "CATEGORY_INVALID_NAME";
         public const string CategoryInvalidType = "CATEGORY_INVALID_TYPE";

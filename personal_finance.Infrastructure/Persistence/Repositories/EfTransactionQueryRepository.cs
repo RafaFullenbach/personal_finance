@@ -97,6 +97,7 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
                     CompetenceMonth = t.CompetenceMonth,
                     Description = t.Description,
                     AccountId = t.AccountId,
+                    CategoryId = t.CategoryId,
                     RecurringTemplateId = t.RecurringTemplateId,
                 })
                 .FirstOrDefaultAsync();

@@ -9,5 +9,6 @@ namespace personal_finance.Application.Interfaces
     {
         Task AddAsync(Account account);
         Task<Account?> GetByIdAsync(Guid id);
+        Task UpdateAsync(Account account); 
     }
 }
