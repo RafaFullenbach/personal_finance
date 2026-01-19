@@ -90,5 +90,11 @@ namespace personal_finance.Infrastructure.Persistence.InMemory
 
             return Task.FromResult<TransactionListItemDto?>(Map(t));
         }
+
+        public Task<bool> AnyForAccountAsync(Guid id)
+        {
+            var exists = _writeRepo.GetById(id) is not null;
+            return Task.FromResult(exists);
+        }
     }
 }

@@ -28,7 +28,6 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
             // ✅ Type filter (SEM ToString no EF)
             if (!string.IsNullOrWhiteSpace(query.Type))
             {
-                // Aqui assume que já veio validado no handler
                 Enum.TryParse<TransactionType>(query.Type, true, out var typeEnum);
                 q = q.Where(t => t.Type == typeEnum);
             }
@@ -36,7 +35,6 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
             // ✅ Status filter (SEM ToString no EF)
             if (!string.IsNullOrWhiteSpace(query.Status))
             {
-                // Aqui assume que já veio validado no handler
                 Enum.TryParse<TransactionStatus>(query.Status, true, out var statusEnum);
                 q = q.Where(t => t.Status == statusEnum);
             }
@@ -69,6 +67,11 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
                     CompetenceMonth = t.CompetenceMonth,
                     Description = t.Description,
                     AccountId = t.AccountId,
+                    AccountName = _db.Accounts
+                        .Where(a => a.Id == t.AccountId)
+                        .Select(a => a.Name)
+                        .FirstOrDefault(),
+                    CategoryId = t.CategoryId,
                     RecurringTemplateId = t.RecurringTemplateId,
                 })
                 .ToListAsync();
@@ -97,6 +100,10 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
                     CompetenceMonth = t.CompetenceMonth,
                     Description = t.Description,
                     AccountId = t.AccountId,
+                    AccountName = _db.Accounts
+                        .Where(a => a.Id == t.AccountId)
+                        .Select(a => a.Name)
+                        .FirstOrDefault(),
                     CategoryId = t.CategoryId,
                     RecurringTemplateId = t.RecurringTemplateId,
                 })

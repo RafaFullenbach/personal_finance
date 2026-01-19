@@ -15,7 +15,7 @@ namespace personal_finance.Application.Queries.Transactions
         public int CompetenceMonth { get; init; }
         public string Description { get; init; } = default!;
         public Guid AccountId { get; init; }
-
+        public string AccountName { get; init; } = default!;
         public Guid? CategoryId { get; init; }
         public Guid? RecurringTemplateId { get; init; }
     }
