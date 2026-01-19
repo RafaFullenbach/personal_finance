@@ -3,8 +3,10 @@ using personal_finance.Application.Exceptions;
 using personal_finance.Application.Interfaces;
 using personal_finance.Domain.Entities;
 using personal_finance.Domain.Enums;
+using personal_finance.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Security.Principal;
 using System.Text;
 
 namespace personal_finance.Application.UseCases.CreateTransfer
@@ -41,6 +43,12 @@ namespace personal_finance.Application.UseCases.CreateTransfer
 
             var to = await _accounts.GetByIdAsync(command.ToAccountId);
             if (to is null) throw NotFoundException.For("Account", command.ToAccountId);
+
+            if (!from.IsActive)
+                throw new BusinessRuleException("Source account is deactivated.");
+
+            if (!to.IsActive)
+                throw new BusinessRuleException("Destination account is deactivated.");
 
             var transferId = Guid.NewGuid();
 

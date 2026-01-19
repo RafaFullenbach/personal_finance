@@ -102,5 +102,8 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
                 })
                 .FirstOrDefaultAsync();
         }
+
+        public Task<bool> AnyForAccountAsync(Guid accountId)
+            => _db.Transactions.AsNoTracking().AnyAsync(t => t.AccountId == accountId);
     }
 }

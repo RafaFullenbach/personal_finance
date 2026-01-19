@@ -2,6 +2,7 @@
 using personal_finance.Application.Exceptions;
 using personal_finance.Application.Interfaces;
 using personal_finance.Domain.Enums;
+using personal_finance.Domain.Exceptions;
 using System;
 
 namespace personal_finance.Application.UseCases.UpdateAccount
@@ -9,10 +10,12 @@ namespace personal_finance.Application.UseCases.UpdateAccount
     public sealed class UpdateAccountHandler
     {
         private readonly IAccountRepository _accounts;
+        private readonly ITransactionQueryRepository _transactionQuery;
 
-        public UpdateAccountHandler(IAccountRepository accounts)
+        public UpdateAccountHandler(IAccountRepository accounts, ITransactionQueryRepository transactionQuery)
         {
             _accounts = accounts;
+            _transactionQuery = transactionQuery;
         }
 
         public async Task<UpdateAccountResult> HandleAsync(UpdateAccountCommand command)
@@ -32,6 +35,15 @@ namespace personal_finance.Application.UseCases.UpdateAccount
             var account = await _accounts.GetByIdAsync(command.Id);
             if (account is null)
                 throw NotFoundException.For("Account", command.Id);
+
+            var newType = type;
+
+            if (account.Type != newType)
+            {
+                var hasTransactions = await _transactionQuery.AnyForAccountAsync(account.Id);
+                if (hasTransactions)
+                    throw new BusinessRuleException("Account type cannot be changed because it already has transactions.");
+            }
 
             try
             {

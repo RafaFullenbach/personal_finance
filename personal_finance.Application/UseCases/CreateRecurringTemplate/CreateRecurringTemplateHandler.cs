@@ -3,6 +3,7 @@ using personal_finance.Application.Exceptions;
 using personal_finance.Application.Interfaces;
 using personal_finance.Domain.Entities;
 using personal_finance.Domain.Enums;
+using personal_finance.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -38,6 +39,9 @@ namespace personal_finance.Application.UseCases.CreateRecurringTemplate
 
             var category = await _categories.GetByIdAsync(command.CategoryId);
             if (category is null) throw NotFoundException.For("Category", command.CategoryId);
+
+            if (!account.IsActive)
+                throw new BusinessRuleException("Account is deactivated. Recurring templates cannot be created.");
 
             var template = new RecurringTransactionTemplate(
                 amount: command.Amount,

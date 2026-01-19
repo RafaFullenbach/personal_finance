@@ -10,5 +10,6 @@ namespace personal_finance.Application.Interfaces
     {
         Task<PagedResult<TransactionListItemDto>> GetAsync(GetTransactionsQuery query);
         Task<TransactionListItemDto?> GetByIdAsync(Guid id);
+        Task<bool> AnyForAccountAsync(Guid accountId);
     }
 }

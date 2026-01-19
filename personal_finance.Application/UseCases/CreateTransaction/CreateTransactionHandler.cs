@@ -1,8 +1,9 @@
 ﻿using personal_finance.Application.Errors;
+using personal_finance.Application.Exceptions;
 using personal_finance.Application.Interfaces;
 using personal_finance.Domain.Entities;
 using personal_finance.Domain.Enums;
-using personal_finance.Application.Exceptions;
+using personal_finance.Domain.Exceptions;
 using System;
 using System.Threading.Tasks;
 
@@ -86,6 +87,9 @@ namespace personal_finance.Application.UseCases.CreateTransaction
             var account = await _accounts.GetByIdAsync(command.AccountId);
             if (account is null)
                 throw NotFoundException.For("Account", command.AccountId);
+
+            if (!account.IsActive)
+                throw new BusinessRuleException("Account is deactivated. Transactions cannot be created.");
 
             // Create transaction including CategoryId (optional)
             var transaction = new Transaction(
