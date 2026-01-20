@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using personal_finance.Application.Queries.Categories;
+using personal_finance.Application.UseCases.ActivateCategory;
 using personal_finance.Application.UseCases.CreateCategory;
+using personal_finance.Application.UseCases.DeactivateCategory;
 using personal_finance.Application.UseCases.UpdateCategory;
 
 namespace personal_finance.API.Controllers
@@ -27,6 +29,24 @@ namespace personal_finance.API.Controllers
         {
             command.Id = id;
             var result = await handler.HandleAsync(command);
+            return Ok(result);
+        }
+
+        [HttpPost("{id:guid}/deactivate")]
+        public async Task<IActionResult> Deactivate(
+            [FromRoute] Guid id,
+            [FromServices] DeactivateCategoryHandler handler)
+        {
+            var result = await handler.HandleAsync(new DeactivateCategoryCommand { Id = id });
+            return Ok(result);
+        }
+
+        [HttpPost("{id:guid}/activate")]
+        public async Task<IActionResult> Activate(
+            [FromRoute] Guid id,
+            [FromServices] ActivateCategoryHandler handler)
+        {
+            var result = await handler.HandleAsync(new ActivateCategoryCommand { Id = id });
             return Ok(result);
         }
     }

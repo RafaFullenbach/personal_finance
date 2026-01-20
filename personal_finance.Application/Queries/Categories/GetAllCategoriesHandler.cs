@@ -14,7 +14,7 @@ namespace personal_finance.Application.Queries.Categories
             _repo = repo;
         }
 
-        public Task<IReadOnlyList<CategoryListItemDto>> HandleAsync(bool includeInactive = false)
+        public Task<IReadOnlyList<CategoryListItemDto>> HandleAsync(bool includeInactive = true)
             => _repo.GetAllAsync(includeInactive);
     }
 }
