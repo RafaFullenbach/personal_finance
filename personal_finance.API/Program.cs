@@ -106,6 +106,7 @@ builder.Services.AddScoped<GetAllAccountsHandler>();
 builder.Services.AddScoped<GetAllCategoriesHandler>();
 builder.Services.AddScoped<GetBudgetsByMonthHandler>();
 builder.Services.AddScoped<GetAllRecurringTemplatesHandler>();
+builder.Services.AddScoped<GetAccountByIdHandler>();
 
 // Reports Query Handlers
 builder.Services.AddScoped<GetMonthlySummaryHandler>();

@@ -30,5 +30,20 @@ namespace personal_finance.Infrastructure.Persistence.InMemory
 
             return Task.FromResult((IReadOnlyList<AccountListItemDto>)items);
         }
+
+        public Task<AccountListItemDto?> GetByIdAsync(Guid id)
+        {
+            var account = _writeRepo.GetByIdAsync(id).Result; 
+            if (account is null)
+                return Task.FromResult<AccountListItemDto?>(null);
+            var dto = new AccountListItemDto
+            {
+                Id = account.Id, // Garante que account.Id é Guid
+                Name = account.Name,
+                Type = account.Type.ToString(),
+                IsActive = account.IsActive
+            };
+            return Task.FromResult<AccountListItemDto?>(dto);
+        }
     }
 }

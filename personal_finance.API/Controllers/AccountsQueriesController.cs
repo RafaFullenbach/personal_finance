@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using personal_finance.Application.Queries.Accounts;
+using personal_finance.Application.Queries.Transactions;
 
 namespace personal_finance.API.Controllers
 {
@@ -19,6 +20,19 @@ namespace personal_finance.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var result = await _handler.HandleAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetById(
+          [FromRoute] Guid id,
+          [FromServices] GetAccountByIdHandler handler)
+        {
+            var result = await handler.HandleAsync(new GetAccountByIdQuery
+            {
+                Id = id
+            });
+
             return Ok(result);
         }
     }
