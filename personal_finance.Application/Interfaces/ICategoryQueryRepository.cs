@@ -8,5 +8,7 @@ namespace personal_finance.Application.Interfaces
     public interface ICategoryQueryRepository
     {
         Task<IReadOnlyList<CategoryListItemDto>> GetAllAsync(bool includeInactive = false);
+
+        Task<CategoryListItemDto?> GetByIdAsync(Guid id);
     }
 }

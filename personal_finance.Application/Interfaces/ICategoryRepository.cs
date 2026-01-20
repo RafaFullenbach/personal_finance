@@ -9,5 +9,6 @@ namespace personal_finance.Application.Interfaces
     {
         Task AddAsync(Category category);
         Task<Category?> GetByIdAsync(Guid id);
+        Task UpdateAsync(Category category);
     }
 }

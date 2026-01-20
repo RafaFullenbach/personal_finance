@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Queries\Categories\CategoryDto.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\personal_finance.Domain\personal_finance.Domain.csproj" />
   </ItemGroup>
 

@@ -32,5 +32,19 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
 
             return items.AsReadOnly();
         }
+
+        public async Task<CategoryListItemDto?> GetByIdAsync(Guid id)
+        {
+            return await _db.Categories.AsNoTracking()
+                .Where(c => c.Id == id)
+                .Select(c => new CategoryListItemDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Type = c.Type.ToString(),
+                    IsActive = c.IsActive
+                })
+                .FirstOrDefaultAsync();
+        }
     }
 }

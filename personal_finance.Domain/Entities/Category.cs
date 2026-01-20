@@ -39,6 +39,11 @@ namespace personal_finance.Domain.Entities
             Name = name.Trim();
         }
 
+        public void ChangeType(CategoryType type)
+        {
+            Type = type;
+        }
+
         public void Deactivate() => IsActive = false;
         public void Activate() => IsActive = true;
     }

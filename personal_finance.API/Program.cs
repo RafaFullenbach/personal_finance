@@ -20,6 +20,7 @@ using personal_finance.Application.UseCases.CreateTransfer;
 using personal_finance.Application.UseCases.DeactivateAccount;
 using personal_finance.Application.UseCases.GenerateRecurringTransactions;
 using personal_finance.Application.UseCases.UpdateAccount;
+using personal_finance.Application.UseCases.UpdateCategory;
 using personal_finance.Application.UseCases.UpdateTransaction;
 using personal_finance.Application.UseCases.UpsertBudget;
 using personal_finance.Infrastructure.Persistence;
@@ -83,6 +84,11 @@ builder.Services.AddScoped<IRecurringTemplateQueryRepository, EfRecurringTemplat
 
 builder.Services.AddScoped<IMonthClosingRepository, EfMonthClosingRepository>();
 
+builder.Services.AddScoped<ICategoryUsageQueryRepository, EfCategoryUsageQueryRepository>();
+
+
+
+
 // Command Handlers
 builder.Services.AddScoped<CreateTransactionHandler>();
 builder.Services.AddScoped<ConfirmTransactionHandler>();
@@ -98,6 +104,7 @@ builder.Services.AddScoped<UpdateTransactionHandler>();
 builder.Services.AddScoped<UpdateAccountHandler>();
 builder.Services.AddScoped<DeactivateAccountHandler>();
 builder.Services.AddScoped<ActivateAccountHandler>();
+builder.Services.AddScoped<UpdateCategoryHandler>();
 
 // Query Handlers
 builder.Services.AddScoped<GetAllTransactionsHandler>();
@@ -107,6 +114,7 @@ builder.Services.AddScoped<GetAllCategoriesHandler>();
 builder.Services.AddScoped<GetBudgetsByMonthHandler>();
 builder.Services.AddScoped<GetAllRecurringTemplatesHandler>();
 builder.Services.AddScoped<GetAccountByIdHandler>();
+builder.Services.AddScoped<GetCategoryByIdHandler>();
 
 // Reports Query Handlers
 builder.Services.AddScoped<GetMonthlySummaryHandler>();

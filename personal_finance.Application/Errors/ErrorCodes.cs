@@ -28,6 +28,7 @@ namespace personal_finance.Application.Errors
         //Categories
         public const string CategoryInvalidName = "CATEGORY_INVALID_NAME";
         public const string CategoryInvalidType = "CATEGORY_INVALID_TYPE";
+        public const string CategoryInvalidId = "CATEGORY_INVALID_ID";
 
         //Budgets
         public const string BudgetInvalidCategory = "BUDGET_CATEGORY_INVALID";

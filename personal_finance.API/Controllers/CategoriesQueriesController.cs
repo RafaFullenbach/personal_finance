@@ -16,5 +16,14 @@ namespace personal_finance.API.Controllers
             var result = await handler.HandleAsync(includeInactive);
             return Ok(result);
         }
+
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetById(
+           [FromRoute] Guid id,
+           [FromServices] GetCategoryByIdHandler handler)
+        {
+            var result = await handler.HandleAsync(new GetCategoryByIdQuery { Id = id });
+            return Ok(result);
+        }
     }
 }

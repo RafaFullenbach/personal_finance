@@ -20,5 +20,11 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
 
         public Task<Category?> GetByIdAsync(Guid id)
             => _db.Categories.FirstOrDefaultAsync(x => x.Id == id);
+
+        public async Task UpdateAsync(Category category)
+        {
+            _db.Categories.Update(category);
+            await _db.SaveChangesAsync();
+        }
     }
 }
