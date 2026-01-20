@@ -14,15 +14,20 @@ namespace personal_finance.Application.UseCases.CreateTransaction
         private readonly ITransactionRepository _repository;
         private readonly IAccountRepository _accounts;
         private readonly IMonthClosingRepository _monthClosings;
+        private readonly ICategoryRepository _categories;
 
         public CreateTransactionHandler(
             ITransactionRepository repository,
             IAccountRepository accounts,
-            IMonthClosingRepository monthClosings)
+            IMonthClosingRepository monthClosings,
+            ICategoryRepository categories)
+
         {
             _repository = repository;
             _accounts = accounts;
             _monthClosings = monthClosings;
+            _categories = categories;
+            _categories = categories;
         }
 
         public async Task<CreateTransactionResult> HandleAsync(CreateTransactionCommand command)
@@ -90,6 +95,18 @@ namespace personal_finance.Application.UseCases.CreateTransaction
 
             if (!account.IsActive)
                 throw new BusinessRuleException("Account is deactivated. Transactions cannot be created.");
+
+            // Category optional: if provided, must exist and be active
+            if (command.CategoryId.HasValue)
+            {
+                var category = await _categories.GetByIdAsync(command.CategoryId.Value);
+                if (category is null)
+                    throw NotFoundException.For("Category", command.CategoryId.Value);
+
+                if (!category.IsActive)
+                    throw new BusinessRuleException("Category is deactivated. Transactions cannot be created.");
+            }
+
 
             // Create transaction including CategoryId (optional)
             var transaction = new Transaction(

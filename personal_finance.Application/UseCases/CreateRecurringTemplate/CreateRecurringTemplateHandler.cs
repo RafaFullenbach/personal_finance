@@ -40,6 +40,9 @@ namespace personal_finance.Application.UseCases.CreateRecurringTemplate
             var category = await _categories.GetByIdAsync(command.CategoryId);
             if (category is null) throw NotFoundException.For("Category", command.CategoryId);
 
+            if (!category.IsActive)
+                throw new BusinessRuleException("Category is deactivated. Recurring templates cannot be created.");
+
             if (!account.IsActive)
                 throw new BusinessRuleException("Account is deactivated. Recurring templates cannot be created.");
 

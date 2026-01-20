@@ -3,6 +3,7 @@ using personal_finance.Application.Exceptions;
 using personal_finance.Application.Interfaces;
 using personal_finance.Domain.Entities;
 using personal_finance.Domain.Enums;
+using personal_finance.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -37,6 +38,9 @@ namespace personal_finance.Application.UseCases.UpsertBudget
             var category = await _categories.GetByIdAsync(command.CategoryId);
             if (category is null)
                 throw NotFoundException.For("Category", command.CategoryId);
+
+            if (!category.IsActive)
+                throw new BusinessRuleException("Category is deactivated. Budgets cannot be created/updated.");
 
             if (category.Type != CategoryType.Expense)
                 throw ValidationException.Invalid("Budgets are allowed only for Expense categories.", ErrorCodes.BudgetInvalidCategoryType);

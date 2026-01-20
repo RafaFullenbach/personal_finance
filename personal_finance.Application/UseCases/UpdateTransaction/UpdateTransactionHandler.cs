@@ -54,6 +54,18 @@ namespace personal_finance.Application.UseCases.UpdateTransaction
                 var category = await _categories.GetByIdAsync(command.CategoryId.Value);
                 if (category is null)
                     throw NotFoundException.For("Category", command.CategoryId.Value);
+
+                if (!category.IsActive)
+                    throw new BusinessRuleException("Category is deactivated. Transactions cannot be assigned to this category.");
+            }
+
+
+            // category optional
+            if (command.CategoryId.HasValue)
+            {
+                var category = await _categories.GetByIdAsync(command.CategoryId.Value);
+                if (category is null)
+                    throw NotFoundException.For("Category", command.CategoryId.Value);
             }
 
             // domain enforcement: only pending
