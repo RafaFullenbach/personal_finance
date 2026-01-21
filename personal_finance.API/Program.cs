@@ -9,6 +9,7 @@ using personal_finance.Application.Queries.Reports;
 using personal_finance.Application.Queries.Transactions;
 using personal_finance.Application.Services.Guards;
 using personal_finance.Application.UseCases.ActivateAccount;
+using personal_finance.Application.UseCases.ActivateBudget;
 using personal_finance.Application.UseCases.ActivateCategory;
 using personal_finance.Application.UseCases.CancelTransaction;
 using personal_finance.Application.UseCases.CloseMonth;
@@ -19,6 +20,7 @@ using personal_finance.Application.UseCases.CreateRecurringTemplate;
 using personal_finance.Application.UseCases.CreateTransaction;
 using personal_finance.Application.UseCases.CreateTransfer;
 using personal_finance.Application.UseCases.DeactivateAccount;
+using personal_finance.Application.UseCases.DeactivateBudget;
 using personal_finance.Application.UseCases.DeactivateCategory;
 using personal_finance.Application.UseCases.GenerateRecurringTransactions;
 using personal_finance.Application.UseCases.UpdateAccount;
@@ -109,6 +111,8 @@ builder.Services.AddScoped<ActivateAccountHandler>();
 builder.Services.AddScoped<UpdateCategoryHandler>();
 builder.Services.AddScoped<ActivateCategoryHandler>();
 builder.Services.AddScoped<DeactivateCategoryHandler>();
+builder.Services.AddScoped<ActivateBudgetHandler>();
+builder.Services.AddScoped<DeactivateBudgetHandler>();
 
 // Query Handlers
 builder.Services.AddScoped<GetAllTransactionsHandler>();
@@ -119,6 +123,7 @@ builder.Services.AddScoped<GetBudgetsByMonthHandler>();
 builder.Services.AddScoped<GetAllRecurringTemplatesHandler>();
 builder.Services.AddScoped<GetAccountByIdHandler>();
 builder.Services.AddScoped<GetCategoryByIdHandler>();
+builder.Services.AddScoped<GetBudgetByIdHandler>();
 
 // Reports Query Handlers
 builder.Services.AddScoped<GetMonthlySummaryHandler>();

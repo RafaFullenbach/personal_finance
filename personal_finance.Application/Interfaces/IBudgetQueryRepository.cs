@@ -8,5 +8,7 @@ namespace personal_finance.Application.Interfaces
     public interface IBudgetQueryRepository
     {
         Task<IReadOnlyList<BudgetListItemDto>> GetByMonthAsync(int year, int month);
+
+        Task<BudgetDto?> GetByIdAsync(Guid id);
     }
 }

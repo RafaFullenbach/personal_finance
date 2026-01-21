@@ -35,6 +35,8 @@ namespace personal_finance.Application.Errors
         public const string BudgetInvalidPeriod = "BUDGET_INVALID_PERIOD";
         public const string BudgetInvalidLimit = "BUDGET_INVALID_LIMIT";
         public const string BudgetInvalidCategoryType = "BUDGET_INVALID_CATEGORY_TYPE";
+        public const string BudgetInvalidId = "BUDGET_INVALID_ID";
+        
 
         //Recurring
         public const string RecurringInvalidAmount = "RECURRING_INVALID_AMOUNT";

@@ -10,5 +10,6 @@ namespace personal_finance.Application.Interfaces
         Task AddAsync(Budget budget);
         Task<Budget?> GetByCategoryAndMonthAsync(Guid categoryId, int year, int month);
         Task UpdateAsync(Budget budget);
+        Task<Budget?> GetByIdAsync(Guid id);
     }
 }

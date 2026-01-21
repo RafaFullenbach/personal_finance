@@ -29,5 +29,10 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
             _db.Budgets.Update(budget);
             await _db.SaveChangesAsync();
         }
+
+        public async Task<Budget?> GetByIdAsync(Guid id)
+        {
+            return await _db.Budgets.FirstOrDefaultAsync(b => b.Id == id);
+        }
     }
 }

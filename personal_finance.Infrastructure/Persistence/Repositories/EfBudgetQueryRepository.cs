@@ -34,5 +34,25 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
 
             return items.AsReadOnly();
         }
+
+        public async Task<BudgetDto?> GetByIdAsync(Guid id)
+        {
+            return await _db.Budgets.AsNoTracking()
+                .Where(b => b.Id == id)
+                .Join(_db.Categories.AsNoTracking(),
+                    b => b.CategoryId,
+                    c => c.Id,
+                    (b, c) => new BudgetDto
+                    {
+                        Id = b.Id,
+                        CategoryId = b.CategoryId,
+                        CategoryName = c.Name,
+                        Year = b.Year,
+                        Month = b.Month,
+                        LimitAmount = b.LimitAmount,
+                        IsActive = b.IsActive
+                    })
+                .FirstOrDefaultAsync();
+        }
     }
 }
