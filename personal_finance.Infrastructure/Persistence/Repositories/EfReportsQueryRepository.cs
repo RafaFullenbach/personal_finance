@@ -15,7 +15,11 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
         public async Task<MonthlySummaryDto> GetMonthlySummaryAsync(GetMonthlySummaryQuery query)
         {
             var q = _db.Transactions.AsNoTracking()
-                .Where(t => t.CompetenceYear == query.Year && t.CompetenceMonth == query.Month);
+                .Where(t =>
+                    t.CompetenceYear == query.Year &&
+                    t.CompetenceMonth == query.Month &&
+                    t.Status == TransactionStatus.Confirmed &&
+                    t.TransferId == null);
 
             var totalCredits = await q.Where(t => t.Type == TransactionType.Credit).SumAsync(t => t.Amount);
             var totalDebits = await q.Where(t => t.Type == TransactionType.Debit).SumAsync(t => t.Amount);
@@ -34,7 +38,7 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
         public async Task<BalanceDto> GetBalanceAsync(GetBalanceQuery query)
         {
             var q = _db.Transactions.AsNoTracking()
-                .Where(t => t.TransactionDate.Date <= query.Date.Date);
+                .Where(t => t.TransactionDate.Date <= query.Date.Date && t.Status == TransactionStatus.Confirmed && t.TransferId == null);
 
             var totalCredits = await q.Where(t => t.Type == TransactionType.Credit).SumAsync(t => t.Amount);
             var totalDebits = await q.Where(t => t.Type == TransactionType.Debit).SumAsync(t => t.Amount);
@@ -51,7 +55,8 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
         public async Task<AccountBalanceDto> GetAccountBalanceAsync(GetAccountBalanceQuery query)
         {
             var q = _db.Transactions.AsNoTracking()
-                .Where(t => t.AccountId == query.AccountId && t.TransactionDate.Date <= query.Date.Date);
+                .Where(t => t.AccountId == query.AccountId && t.TransactionDate.Date <= query.Date.Date
+                && t.Status == TransactionStatus.Confirmed);
 
             var totalCredits = await q.Where(t => t.Type == TransactionType.Credit).SumAsync(t => t.Amount);
             var totalDebits = await q.Where(t => t.Type == TransactionType.Debit).SumAsync(t => t.Amount);
@@ -69,8 +74,9 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
         public async Task<IReadOnlyList<CategorySummaryItemDto>> GetCategorySummaryAsync(GetCategorySummaryQuery query)
         {
             var tx = _db.Transactions.AsNoTracking()
-                .Where(t => t.CompetenceYear == query.Year && t.CompetenceMonth == query.Month)
-                .Where(t => t.CategoryId != null);
+                .Where(t => t.CompetenceYear == query.Year && t.CompetenceMonth == query.Month && t.Status == TransactionStatus.Confirmed)
+                .Where(t => t.CategoryId != null)
+                .Where(t => t.TransferId == null);
 
             // filtro opcional por tipo (Expense/Income)
             if (!string.IsNullOrWhiteSpace(query.Type) &&
@@ -141,7 +147,8 @@ namespace personal_finance.Infrastructure.Persistence.Repositories
 
             // Actual (somente Debit) agrupado por categoria
             var actuals = await _db.Transactions.AsNoTracking()
-                .Where(t => t.CompetenceYear == query.Year && t.CompetenceMonth == query.Month)
+                .Where(t => t.CompetenceYear == query.Year && t.CompetenceMonth == query.Month && t.Status == TransactionStatus.Confirmed
+                && t.TransferId == null)
                 .Where(t => t.CategoryId != null)
                 .Where(t => t.Type == TransactionType.Debit)
                 .GroupBy(t => t.CategoryId!.Value)
