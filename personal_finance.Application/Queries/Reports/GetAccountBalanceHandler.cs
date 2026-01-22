@@ -17,11 +17,16 @@ namespace personal_finance.Application.Queries.Reports
             _accounts = accounts;
         }
 
-        public async Task<AccountBalanceDto> HandleAsync(GetAccountBalanceQuery query)
+        public async Task<AccountBalanceDto?> HandleAsync(GetAccountBalanceQuery query)
         {
             var account = await _accounts.GetByIdAsync(query.AccountId);
             if (account is null)
                 throw NotFoundException.For("Account", query.AccountId);
+
+            if (!account.IsActive)
+            {
+                return null;
+            }
 
             return await _reports.GetAccountBalanceAsync(query);
         }
