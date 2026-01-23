@@ -15,6 +15,7 @@ namespace personal_finance.Application.Errors
         public const string QueryInvalidPagination = "QUERY_INVALID_PAGINATION";
         public const string QueryInvalidSort = "QUERY_INVALID_SORT";
         public const string TransactionInvalidUpdate = "TRANSACTION_INVALID_UPDATE";
+        public const string TransactionInvalidCategory = "TRANSACTION_INVALID_CATEGORY";
 
         //Reports
         public const string ReportInvalidPeriod = "REPORT_INVALID_PERIOD";

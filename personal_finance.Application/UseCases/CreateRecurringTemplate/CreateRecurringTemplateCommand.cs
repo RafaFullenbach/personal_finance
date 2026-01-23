@@ -9,7 +9,7 @@ namespace personal_finance.Application.UseCases.CreateRecurringTemplate
         public decimal Amount { get; init; }
         public string Type { get; init; } = default!;
         public Guid AccountId { get; init; }
-        public Guid CategoryId { get; init; }
+        public Guid? CategoryId { get; init; }
         public string Description { get; init; } = default!;
         public int DayOfMonth { get; init; }
         public int CompetenceOffsetMonths { get; init; } = 0;

@@ -37,7 +37,10 @@ namespace personal_finance.Application.UseCases.CreateRecurringTemplate
             var account = await _accounts.GetByIdAsync(command.AccountId);
             if (account is null) throw NotFoundException.For("Account", command.AccountId);
 
-            var category = await _categories.GetByIdAsync(command.CategoryId);
+            if (!command.CategoryId.HasValue)
+                throw ValidationException.Invalid("CategoryId is required.", ErrorCodes.TransactionInvalidCategory);
+
+            var category = await _categories.GetByIdAsync(command.CategoryId.Value);
             if (category is null) throw NotFoundException.For("Category", command.CategoryId);
 
             if (!category.IsActive)
@@ -50,7 +53,7 @@ namespace personal_finance.Application.UseCases.CreateRecurringTemplate
                 amount: command.Amount,
                 type: type,
                 accountId: command.AccountId,
-                categoryId: command.CategoryId,
+                categoryId: command.CategoryId.Value,
                 description: command.Description,
                 dayOfMonth: command.DayOfMonth,
                 startDate: command.StartDate,
