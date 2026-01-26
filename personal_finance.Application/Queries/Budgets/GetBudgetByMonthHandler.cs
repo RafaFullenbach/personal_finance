@@ -1,4 +1,4 @@
-﻿using personal_finance.Application.Interfaces;
+﻿using personal_finance.Application.Interfaces.Budgets;
 using System;
 using System.Collections.Generic;
 using System.Text;

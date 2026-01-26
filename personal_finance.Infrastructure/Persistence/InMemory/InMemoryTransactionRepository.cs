@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using personal_finance.Application.Interfaces;
+using personal_finance.Application.Interfaces.Transactions;
 using personal_finance.Domain.Entities;
 
 namespace personal_finance.Infrastructure.Persistence.InMemory

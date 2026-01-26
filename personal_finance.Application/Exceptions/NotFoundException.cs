@@ -9,6 +9,6 @@ namespace personal_finance.Application.Exceptions
         public NotFoundException(string message) : base(message) { }
 
         public static NotFoundException For(string resourceName, object key)
-          => new NotFoundException($"{resourceName} '{key}' was not found.");
+          => new NotFoundException($"{resourceName} '{key}' não foi encontrada.");
     }
 }

@@ -1,6 +1,7 @@
 ﻿using personal_finance.Application.Errors;
 using personal_finance.Application.Exceptions;
-using personal_finance.Application.Interfaces;
+using personal_finance.Application.Interfaces.CloseMonth;
+using personal_finance.Application.Interfaces.Transactions;
 using personal_finance.Domain.Entities;
 using personal_finance.Domain.Enums;
 using personal_finance.Domain.Exceptions;
@@ -21,10 +22,10 @@ namespace personal_finance.Application.UseCases.CloseMonth
         public async Task<CloseMonthResult> HandleAsync(CloseMonthCommand command)
         {
             if (command.Year < 2000 || command.Year > 2100)
-                throw ValidationException.Invalid("Invalid year.", ErrorCodes.MonthCloseInvalidPeriod);
+                throw ValidationException.Invalid("Ano inválido.", ErrorCodes.MonthCloseInvalidPeriod);
 
             if (command.Month < 1 || command.Month > 12)
-                throw ValidationException.Invalid("Invalid month.", ErrorCodes.MonthCloseInvalidPeriod);
+                throw ValidationException.Invalid("Mês inválido.", ErrorCodes.MonthCloseInvalidPeriod);
 
             var existing = await _closings.GetByPeriodAsync(command.Year, command.Month);
             if (existing is not null)

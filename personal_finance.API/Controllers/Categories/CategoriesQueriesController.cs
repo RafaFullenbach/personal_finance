@@ -1,0 +1,29 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using personal_finance.Application.Queries.Categories;
+
+namespace personal_finance.API.Controllers.Categories
+{
+    [ApiController]
+    [Route("categories")]
+    [ApiExplorerSettings(GroupName = "Queries")]
+    public class CategoriesQueryController : ControllerBase
+    {
+        [HttpGet]
+        public async Task<IActionResult> GetAll(
+            [FromQuery] bool includeInactive,
+            [FromServices] GetAllCategoriesHandler handler)
+        {
+            var result = await handler.HandleAsync(includeInactive);
+            return Ok(result);
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetById(
+           [FromRoute] Guid id,
+           [FromServices] GetCategoryByIdHandler handler)
+        {
+            var result = await handler.HandleAsync(new GetCategoryByIdQuery { Id = id });
+            return Ok(result);
+        }
+    }
+}

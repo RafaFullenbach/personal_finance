@@ -1,4 +1,4 @@
-﻿using personal_finance.Application.Interfaces;
+﻿using personal_finance.Application.Interfaces.Transactions;
 using personal_finance.Application.Queries.Common;
 using personal_finance.Application.Queries.Transactions;
 using personal_finance.Domain.Entities;

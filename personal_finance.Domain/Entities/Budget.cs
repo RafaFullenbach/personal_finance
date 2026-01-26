@@ -15,21 +15,21 @@ namespace personal_finance.Domain.Entities
         public DateTime CreatedAt { get; private set; }
         public DateTime UpdatedAt { get; private set; }
 
-        private Budget() { } // EF
+        private Budget() { }
 
         public Budget(Guid categoryId, int year, int month, decimal limitAmount)
         {
             if (categoryId == Guid.Empty)
-                throw new ArgumentException("CategoryId is required.");
+                throw new ArgumentException("Id de categoria é obrigatório.");
 
             if (year < 2000 || year > 2100)
-                throw new ArgumentException("Invalid year.");
+                throw new ArgumentException("Ano inválido.");
 
             if (month < 1 || month > 12)
-                throw new ArgumentException("Invalid month.");
+                throw new ArgumentException("Mês inválido.");
 
             if (limitAmount <= 0)
-                throw new ArgumentException("LimitAmount must be greater than zero.");
+                throw new ArgumentException("Valor limite deve ser maior que zero.");
 
             Id = Guid.NewGuid();
             CategoryId = categoryId;
@@ -45,7 +45,7 @@ namespace personal_finance.Domain.Entities
         public void UpdateLimit(decimal limitAmount)
         {
             if (limitAmount <= 0)
-                throw new ArgumentException("LimitAmount must be greater than zero.");
+                throw new ArgumentException("Valor limite deve ser maior que zero.");
 
             LimitAmount = limitAmount;
             UpdatedAt = DateTime.UtcNow;

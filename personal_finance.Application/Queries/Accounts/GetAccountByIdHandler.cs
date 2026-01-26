@@ -1,5 +1,5 @@
 ﻿using personal_finance.Application.Exceptions;
-using personal_finance.Application.Interfaces;
+using personal_finance.Application.Interfaces.Accounts;
 using personal_finance.Application.Queries.Transactions;
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace personal_finance.Application.Queries.Accounts
             var item = await _repo.GetByIdAsync(query.Id);
 
             if (item is null)
-                throw NotFoundException.For("Account", query.Id);
+                throw NotFoundException.For("Conta", query.Id);
 
             return item;
         }

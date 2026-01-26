@@ -1,9 +1,9 @@
 ﻿using personal_finance.Application.Errors;
-using personal_finance.Application.Interfaces;
 using personal_finance.Application.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using personal_finance.Application.Interfaces.CloseMonth;
 
 namespace personal_finance.Application.Services.Guards
 {

@@ -1,5 +1,5 @@
 ﻿using personal_finance.Application.Exceptions;
-using personal_finance.Application.Interfaces;
+using personal_finance.Application.Interfaces.Transactions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,7 +20,7 @@ namespace personal_finance.Application.Queries.Transactions
             var item = await _repo.GetByIdAsync(query.Id);
 
             if (item is null)
-                throw NotFoundException.For("Transaction", query.Id);
+                throw NotFoundException.For("Lançamento", query.Id);
 
             return item;
         }

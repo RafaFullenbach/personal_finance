@@ -11,10 +11,10 @@ namespace personal_finance.Application.Services.Guards
         public static T ParseOrThrow<T>(string? value, string fieldName, string errorCode) where T : struct, Enum
         {
             if (string.IsNullOrWhiteSpace(value))
-                throw ValidationException.Invalid($"{fieldName} is required.", errorCode);
+                throw ValidationException.Invalid($"{fieldName} é obrigatório.", errorCode);
 
             if (!Enum.TryParse<T>(value, ignoreCase: true, out var parsed))
-                throw ValidationException.Invalid($"{fieldName} '{value}' is invalid.", errorCode);
+                throw ValidationException.Invalid($"{fieldName} '{value}' é inválido.", errorCode);
 
             return parsed;
         }

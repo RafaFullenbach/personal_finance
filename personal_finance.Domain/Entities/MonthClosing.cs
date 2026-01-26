@@ -15,8 +15,8 @@ namespace personal_finance.Domain.Entities
 
         public MonthClosing(int year, int month)
         {
-            if (year < 2000 || year > 2100) throw new ArgumentException("Invalid year.");
-            if (month < 1 || month > 12) throw new ArgumentException("Invalid month.");
+            if (year < 2000 || year > 2100) throw new ArgumentException("Ano inválido.");
+            if (month < 1 || month > 12) throw new ArgumentException("Mês inválido.");
 
             Id = Guid.NewGuid();
             Year = year;

@@ -36,10 +36,10 @@ namespace personal_finance.Domain.Entities
         Guid? recurringTemplateId = null)
         {
             if (amount <= 0)
-                throw new ArgumentException("Amount must be greater than zero.");
+                throw new ArgumentException("O valor precisa ser maior que zero");
 
             if (competenceMonth < 1 || competenceMonth > 12)
-                throw new ArgumentException("Invalid competence month.");
+                throw new ArgumentException("Mês de competência inválido.");
 
             Id = Guid.NewGuid();
             Amount = amount;
@@ -59,7 +59,7 @@ namespace personal_finance.Domain.Entities
         {
             if (Status != TransactionStatus.Pending)
                 throw new InvalidOperationException(
-                    "Only pending transactions can be confirmed.");
+                    "Apenas transações pendentes podem ser confirmadas.");
 
             Status = TransactionStatus.Confirmed;
         }
@@ -67,7 +67,7 @@ namespace personal_finance.Domain.Entities
         public void Cancel()
         {
             if (Status != TransactionStatus.Pending)
-                throw new BusinessRuleException("Only pending transactions can be cancelled.");
+                throw new BusinessRuleException("Apenas transações pendentes podem ser canceladas.");
 
             Status = TransactionStatus.Cancelled;
         }
@@ -83,22 +83,22 @@ namespace personal_finance.Domain.Entities
         Guid? categoryId)
         {
             if (Status != TransactionStatus.Pending)
-                throw new InvalidOperationException("Only pending transactions can be edited.");
+                throw new InvalidOperationException("Apenas transações pendentes podem ser editadas.");
 
             if (amount <= 0)
-                throw new ArgumentException("Amount must be greater than zero.");
+                throw new ArgumentException("Valor precisa ser maior que zero.");
 
             if (competenceMonth < 1 || competenceMonth > 12)
-                throw new ArgumentException("Invalid competence month.");
+                throw new ArgumentException("Mês de competência inválido.");
 
             if (competenceYear < 2000 || competenceYear > 2100)
-                throw new ArgumentException("Invalid competence year.");
+                throw new ArgumentException("Ano de competência inválido.");
 
             if (string.IsNullOrWhiteSpace(description))
-                throw new ArgumentException("Description is required.");
+                throw new ArgumentException("Descrição é obrigatória.");
 
             if (description.Length > 200)
-                throw new ArgumentException("Description must be 200 characters or less.");
+                throw new ArgumentException("Descrição pode ter no máximo 200 caracteres.");
 
             Amount = amount;
             Type = type;

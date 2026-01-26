@@ -39,7 +39,7 @@ namespace personal_finance.API.Middleware
             catch (Exception ex)
             {
                 await WriteProblem(context, HttpStatusCode.InternalServerError,
-                    "An unexpected error occurred.");
+                    "Um erro inesperado ocorreu.");
             }
         }
 

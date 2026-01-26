@@ -17,10 +17,10 @@ namespace personal_finance.Domain.Entities
         public Category(string name, CategoryType type)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("Category name is required.");
+                throw new ArgumentException("Nome da categoria é obrigatório.");
 
             if (name.Length > 100)
-                throw new ArgumentException("Category name must be 100 characters or less.");
+                throw new ArgumentException("O nome da categoria deve ter no máximo 100 caracteres.");
 
             Id = Guid.NewGuid();
             Name = name.Trim();
@@ -31,10 +31,10 @@ namespace personal_finance.Domain.Entities
         public void Rename(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("Category name is required.");
+                throw new ArgumentException("Nome da categoria é obrigatório.");
 
             if (name.Length > 100)
-                throw new ArgumentException("Category name must be 100 characters or less.");
+                throw new ArgumentException("O nome da categoria deve ter no máximo 100 caracteres.");
 
             Name = name.Trim();
         }

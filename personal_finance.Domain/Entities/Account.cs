@@ -34,12 +34,12 @@ namespace personal_finance.Domain.Entities
         public void UpdateName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new BusinessRuleException("Account name is required.");
+                throw new BusinessRuleException("Conta é obrigatória.");
 
             var trimmed = name.Trim();
 
             if (trimmed.Length > 100)
-                throw new BusinessRuleException("Name must be 100 characters or less.");
+                throw new BusinessRuleException("Nome deve ter no máximo 100 caracteres.");
 
             Name = trimmed;
         }
@@ -51,13 +51,13 @@ namespace personal_finance.Domain.Entities
 
         public void Deactivate()
         {
-            if (!IsActive) throw new BusinessRuleException("The account is already deactivated."); // idempotente (ou lançar regra se preferir)
+            if (!IsActive) throw new BusinessRuleException("A conta já está desativada."); 
             IsActive = false;
         }
 
         public void Activate()
         {
-            if (IsActive) throw new BusinessRuleException("The account is already active.");
+            if (IsActive) throw new BusinessRuleException("A conta já está ativada.");
             IsActive = true;
         }
     }

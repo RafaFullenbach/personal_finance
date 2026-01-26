@@ -1,6 +1,10 @@
-﻿using personal_finance.Application.Interfaces;
+﻿using personal_finance.Application.Interfaces.Reports;
 using personal_finance.Application.Queries.Budgets;
-using personal_finance.Application.Queries.Reports;
+using personal_finance.Application.Queries.Reports.Accounts;
+using personal_finance.Application.Queries.Reports.Balance;
+using personal_finance.Application.Queries.Reports.Budgets;
+using personal_finance.Application.Queries.Reports.CategorySummary;
+using personal_finance.Application.Queries.Reports.MonthlySummary;
 using personal_finance.Domain.Enums;
 
 namespace personal_finance.Infrastructure.Persistence.InMemory

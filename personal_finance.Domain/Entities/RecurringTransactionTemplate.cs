@@ -15,8 +15,8 @@ namespace personal_finance.Domain.Entities
         public DateTime StartDate { get; private set; }
         public DateTime? EndDate { get; private set; }
 
-        public int DayOfMonth { get; private set; } // 1..28 (MVP seguro)
-        public int CompetenceOffsetMonths { get; private set; } // 0 = mesmo mês; opcional pra salário cair dia 5 mas competência 1
+        public int DayOfMonth { get; private set; }
+        public int CompetenceOffsetMonths { get; private set; }
 
         public string Description { get; private set; }
 
@@ -28,7 +28,7 @@ namespace personal_finance.Domain.Entities
         public DateTime CreatedAt { get; private set; }
         public DateTime UpdatedAt { get; private set; }
 
-        private RecurringTransactionTemplate() { } // EF
+        private RecurringTransactionTemplate() { }
 
         public RecurringTransactionTemplate(
             decimal amount,
@@ -41,14 +41,13 @@ namespace personal_finance.Domain.Entities
             DateTime? endDate = null,
             int competenceOffsetMonths = 0)
         {
-            if (amount <= 0) throw new ArgumentException("Amount must be greater than zero.");
-            if (accountId == Guid.Empty) throw new ArgumentException("AccountId is required.");
-            if (categoryId == Guid.Empty) throw new ArgumentException("CategoryId is required.");
-            if (string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Description is required.");
-            if (description.Length > 200) throw new ArgumentException("Description must be 200 characters or less.");
+            if (amount <= 0) throw new ArgumentException("Valor deve ser maior que zero.");
+            if (accountId == Guid.Empty) throw new ArgumentException("Id da conta é obrigatório.");
+            if (categoryId == Guid.Empty) throw new ArgumentException("Id da categoria é obrigatório.");
+            if (string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Descrição é obrigatória.");
+            if (description.Length > 200) throw new ArgumentException("Descrição deve ter no máximo 200 caracteres.");
 
-            // MVP: 1..28 para não ter dor com mês curto (fev)
-            if (dayOfMonth < 1 || dayOfMonth > 28) throw new ArgumentException("DayOfMonth must be between 1 and 28.");
+            if (dayOfMonth < 1 || dayOfMonth > 28) throw new ArgumentException("Dia do mês deve estar entre 1 e 28.");
 
             Id = Guid.NewGuid();
             Amount = amount;
@@ -89,12 +88,12 @@ namespace personal_finance.Domain.Entities
             DateTime? endDate,
             int competenceOffsetMonths)
         {
-            if (amount <= 0) throw new ArgumentException("Amount must be greater than zero.");
-            if (accountId == Guid.Empty) throw new ArgumentException("AccountId is required.");
-            if (categoryId == Guid.Empty) throw new ArgumentException("CategoryId is required.");
-            if (string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Description is required.");
-            if (description.Length > 200) throw new ArgumentException("Description must be 200 characters or less.");
-            if (dayOfMonth < 1 || dayOfMonth > 28) throw new ArgumentException("DayOfMonth must be between 1 and 28.");
+            if (amount <= 0) throw new ArgumentException("Valor deve ser maior que zero.");
+            if (accountId == Guid.Empty) throw new ArgumentException("Id da conta é obrigatório.");
+            if (categoryId == Guid.Empty) throw new ArgumentException("Id da categoria é obrigatório.");
+            if (string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Descrição é obrigatória.");
+            if (description.Length > 200) throw new ArgumentException("Descrição deve ter no máximo 200 caracteres.");
+            if (dayOfMonth < 1 || dayOfMonth > 28) throw new ArgumentException("Dia do mês deve estar entre 1 e 28.");
 
             Amount = amount;
             Type = type;

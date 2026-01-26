@@ -1,5 +1,5 @@
 ﻿using personal_finance.Application.Exceptions;
-using personal_finance.Application.Interfaces;
+using personal_finance.Application.Interfaces.Budgets;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,7 +19,7 @@ namespace personal_finance.Application.Queries.Budgets
         {
             var item = await _repo.GetByIdAsync(query.Id);
             if (item is null)
-                throw NotFoundException.For("Budget", query.Id);
+                throw NotFoundException.For("Orçamento", query.Id);
 
             return item;
         }

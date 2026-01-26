@@ -1,4 +1,4 @@
-﻿using personal_finance.Application.Interfaces;
+﻿using personal_finance.Application.Interfaces.Accounts;
 using personal_finance.Domain.Entities;
 using System;
 using System.Collections.Concurrent;

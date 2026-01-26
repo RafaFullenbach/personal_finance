@@ -1,5 +1,5 @@
 ﻿using personal_finance.Application.Exceptions;
-using personal_finance.Application.Interfaces;
+using personal_finance.Application.Interfaces.Categories;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,7 +19,7 @@ namespace personal_finance.Application.Queries.Categories
         {
             var item = await _repo.GetByIdAsync(query.Id);
             if (item is null)
-                throw NotFoundException.For("Category", query.Id);
+                throw NotFoundException.For("Categoria", query.Id);
 
             return item;
         }
