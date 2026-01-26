@@ -15,5 +15,6 @@ namespace personal_finance.Application.Queries.Transactions
         public string? SortBy { get; init; } = "transactionDate";
         public string? Order { get; init; } = "desc";
         public bool IncludeTransfers { get; init; } = false;
+        public string? Description { get; init; }
     }
 }

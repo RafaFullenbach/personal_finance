@@ -37,6 +37,14 @@ namespace personal_finance.Infrastructure.Persistence.Repositories.Transactions
                 q = q.Where(t => t.Status == statusEnum);
             }
 
+            if (!string.IsNullOrWhiteSpace(query.Description))
+            {
+                var term = query.Description.Trim();
+
+                // %term%  => contém
+                q = q.Where(t => EF.Functions.Like(t.Description, $"%{term}%"));
+            }
+
             var total = await q.CountAsync();
 
             var desc = string.Equals(query.Order, "desc", StringComparison.OrdinalIgnoreCase);
