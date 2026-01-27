@@ -5,7 +5,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 
-namespace personal_finance.Infrastructure.Persistence.InMemory
+namespace personal_finance.Infrastructure.Persistence.InMemory.Accounts
 {
     public class InMemoryAccountRepository : IAccountRepository
     {

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace personal_finance.Infrastructure.Persistence.InMemory
+namespace personal_finance.Infrastructure.Persistence.InMemory.Transactions
 {
     public class InMemoryTransactionQueryRepository : ITransactionQueryRepository
     {

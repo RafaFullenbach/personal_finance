@@ -58,7 +58,7 @@ namespace personal_finance.Domain.Entities
         public void Confirm()
         {
             if (Status != TransactionStatus.Pending)
-                throw new InvalidOperationException(
+                throw new BusinessRuleException(
                     "Apenas transações pendentes podem ser confirmadas.");
 
             Status = TransactionStatus.Confirmed;
@@ -83,7 +83,7 @@ namespace personal_finance.Domain.Entities
         Guid? categoryId)
         {
             if (Status != TransactionStatus.Pending)
-                throw new InvalidOperationException("Apenas transações pendentes podem ser editadas.");
+                throw new BusinessRuleException("Apenas transações pendentes podem ser editadas.");
 
             if (amount <= 0)
                 throw new ArgumentException("Valor precisa ser maior que zero.");

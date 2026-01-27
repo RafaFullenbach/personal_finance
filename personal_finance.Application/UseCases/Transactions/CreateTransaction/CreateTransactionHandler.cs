@@ -30,7 +30,6 @@ namespace personal_finance.Application.UseCases.Transactions.CreateTransaction
             _accounts = accounts;
             _monthClosings = monthClosings;
             _categories = categories;
-            _categories = categories;
         }
 
         public async Task<CreateTransactionResult> HandleAsync(CreateTransactionCommand command)

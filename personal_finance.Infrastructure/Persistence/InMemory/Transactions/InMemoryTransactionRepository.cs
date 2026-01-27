@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 using personal_finance.Application.Interfaces.Transactions;
 using personal_finance.Domain.Entities;
 
-namespace personal_finance.Infrastructure.Persistence.InMemory
+namespace personal_finance.Infrastructure.Persistence.InMemory.Transactions
 {
-    public class InMemoryTransactionRepository : ITransactionRepository
+    public sealed class InMemoryTransactionRepository : ITransactionRepository
     {
-        private static readonly ConcurrentDictionary<Guid, Transaction> _store = new();
+        private readonly ConcurrentDictionary<Guid, Transaction> _store = new();
 
         public Task AddAsync(Transaction transaction)
         {
+            if (transaction is null)
+                throw new ArgumentNullException(nameof(transaction));
+
             if (!_store.TryAdd(transaction.Id, transaction))
                 throw new InvalidOperationException("Transaction with the same id already exists.");
 
@@ -28,18 +31,11 @@ namespace personal_finance.Infrastructure.Persistence.InMemory
 
         public Task UpdateAsync(Transaction transaction)
         {
+            if (transaction is null)
+                throw new ArgumentNullException(nameof(transaction));
+
             _store[transaction.Id] = transaction;
             return Task.CompletedTask;
-        }
-
-        public IReadOnlyCollection<Transaction> GetAll()
-        {
-            return _store.Values.ToList().AsReadOnly();
-        }
-
-        public Transaction? GetById(Guid id)
-        {
-            return _store.TryGetValue(id, out var t) ? t : null;
         }
 
         public Task<bool> ExistsForRecurringAsync(Guid recurringTemplateId, int year, int month)
@@ -57,10 +53,17 @@ namespace personal_finance.Infrastructure.Persistence.InMemory
         {
             var list = _store.Values
                 .Where(t => t.CompetenceYear == year && t.CompetenceMonth == month)
-                .ToList()
-                .AsReadOnly();
+                .OrderBy(t => t.TransactionDate) // opcional: previsibilidade em testes
+                .ToList();
 
-            return Task.FromResult((IReadOnlyList<Transaction>)list);
+            return Task.FromResult((IReadOnlyList<Transaction>)list.AsReadOnly());
         }
+
+        public IReadOnlyCollection<Transaction> GetAll()
+            => _store.Values.ToList().AsReadOnly();
+
+        public Transaction? GetById(Guid id)
+            => _store.TryGetValue(id, out var t) ? t : null;
+        public void Clear() => _store.Clear();
     }
 }

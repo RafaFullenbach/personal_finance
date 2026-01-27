@@ -6,8 +6,9 @@ using personal_finance.Application.Queries.Reports.Budgets;
 using personal_finance.Application.Queries.Reports.CategorySummary;
 using personal_finance.Application.Queries.Reports.MonthlySummary;
 using personal_finance.Domain.Enums;
+using personal_finance.Infrastructure.Persistence.InMemory.Transactions;
 
-namespace personal_finance.Infrastructure.Persistence.InMemory
+namespace personal_finance.Infrastructure.Persistence.InMemory.Reports
 {
     public class InMemoryReportsQueryRepository : IReportsQueryRepository
     {
