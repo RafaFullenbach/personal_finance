@@ -59,7 +59,9 @@ builder.Services.AddCors(options =>
         policy
             .WithOrigins(
                 "http://localhost:4200",
-                "https://localhost:4200"
+                "https://localhost:4200",
+                "http://localhost:59768",
+                "https://localhost:59768"
             )
             .AllowAnyHeader()
             .AllowAnyMethod();
@@ -152,6 +154,12 @@ builder.Services.AddScoped<GetBudgetVsActualHandler>();
 builder.Services.AddScoped<MonthCloseGuard>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
