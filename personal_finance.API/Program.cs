@@ -161,8 +161,8 @@ using (var scope = app.Services.CreateScope())
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
 
     app.UseSwaggerUI(c =>
@@ -170,7 +170,7 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/Commands/swagger.json", "Commands");
         c.SwaggerEndpoint("/swagger/Queries/swagger.json", "Queries");
     });
-}
+//}
 
 // CORS deve vir antes de Authorization/MapControllers
 if (app.Environment.IsDevelopment())
