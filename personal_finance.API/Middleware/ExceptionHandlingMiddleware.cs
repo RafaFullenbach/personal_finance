@@ -28,6 +28,10 @@ namespace personal_finance.API.Middleware
             {
                 await WriteProblem(context, HttpStatusCode.NotFound, ex.Message);
             }
+            catch (ArgumentException ex)
+            {
+                await WriteProblem(context, HttpStatusCode.BadRequest, ex.Message);
+            }
             catch (ValidationException ex)
             {
                 await WriteProblem(

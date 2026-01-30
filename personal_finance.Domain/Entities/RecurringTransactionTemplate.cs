@@ -47,7 +47,7 @@ namespace personal_finance.Domain.Entities
             if (string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Descrição é obrigatória.");
             if (description.Length > 200) throw new ArgumentException("Descrição deve ter no máximo 200 caracteres.");
 
-            if (dayOfMonth < 1 || dayOfMonth > 28) throw new ArgumentException("Dia do mês deve estar entre 1 e 28.");
+            if (dayOfMonth < 1 || dayOfMonth > 31) throw new ArgumentException("Dia do mês deve estar entre 1 e 31.");
 
             Id = Guid.NewGuid();
             Amount = amount;
@@ -93,7 +93,7 @@ namespace personal_finance.Domain.Entities
             if (categoryId == Guid.Empty) throw new ArgumentException("Id da categoria é obrigatório.");
             if (string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Descrição é obrigatória.");
             if (description.Length > 200) throw new ArgumentException("Descrição deve ter no máximo 200 caracteres.");
-            if (dayOfMonth < 1 || dayOfMonth > 28) throw new ArgumentException("Dia do mês deve estar entre 1 e 28.");
+            if (dayOfMonth < 1 || dayOfMonth > 31) throw new ArgumentException("Dia do mês deve estar entre 1 e 31.");
 
             Amount = amount;
             Type = type;

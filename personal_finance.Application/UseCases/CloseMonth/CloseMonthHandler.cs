@@ -28,16 +28,10 @@ namespace personal_finance.Application.UseCases.CloseMonth
                 throw ValidationException.Invalid("Mês inválido.", ErrorCodes.MonthCloseInvalidPeriod);
 
             var existing = await _closings.GetByPeriodAsync(command.Year, command.Month);
+
             if (existing is not null)
             {
-                return new CloseMonthResult
-                {
-                    Year = existing.Year,
-                    Month = existing.Month,
-                    ClosedAt = existing.ClosedAt,
-                    ConfirmedCount = 0,
-                    Action = "AlreadyClosed"
-                };
+                throw new BusinessRuleException("Este mês já está fechado.");
             }
 
             int confirmed = 0;
