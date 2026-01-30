@@ -1,11 +1,13 @@
 ﻿using personal_finance.Application.Errors;
 using personal_finance.Application.Exceptions;
+using personal_finance.Application.Interfaces.CloseMonth;
+using personal_finance.Application.Interfaces.Recurring;
+using personal_finance.Application.Interfaces.Transactions;
 using personal_finance.Domain.Entities;
+using personal_finance.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using personal_finance.Application.Interfaces.Recurring;
-using personal_finance.Application.Interfaces.Transactions;
 
 namespace personal_finance.Application.UseCases.Recurring.GenerateRecurringTransactions
 {
@@ -13,13 +15,16 @@ namespace personal_finance.Application.UseCases.Recurring.GenerateRecurringTrans
     {
         private readonly IRecurringTemplateRepository _templates;
         private readonly ITransactionRepository _transactions;
+        private readonly IMonthClosingRepository _monthsClosing;
 
         public GenerateRecurringTransactionsHandler(
             IRecurringTemplateRepository templates,
-            ITransactionRepository transactions)
+            ITransactionRepository transactions,
+            IMonthClosingRepository monthsClosing)
         {
             _templates = templates;
             _transactions = transactions;
+            _monthsClosing = monthsClosing;
         }
 
         public async Task<GenerateRecurringTransactionsResult> HandleAsync(GenerateRecurringTransactionsCommand command)
@@ -29,6 +34,13 @@ namespace personal_finance.Application.UseCases.Recurring.GenerateRecurringTrans
 
             if (command.Year < 2000 || command.Year > 2100)
                 throw ValidationException.Invalid("Ano inválido.", ErrorCodes.RecurringInvalidPeriod);
+
+            var existing = await _monthsClosing.GetByPeriodAsync(command.Year, command.Month);
+
+            if(existing is not null)
+            {
+                throw new BusinessRuleException("Não foi possível gerar recorrências, pois o mês está fechado.");
+            }
 
             var active = await _templates.GetActiveAsync();
 
@@ -47,7 +59,9 @@ namespace personal_finance.Application.UseCases.Recurring.GenerateRecurringTrans
                 var exists = await _transactions.ExistsForRecurringAsync(tpl.Id, command.Year, command.Month);
                 if (exists) { skipped++; continue; }
 
-                var day = tpl.DayOfMonth;
+                var maxDayInMonth = DateTime.DaysInMonth(command.Year, command.Month);
+                var day = Math.Min(tpl.DayOfMonth, maxDayInMonth);
+
                 var txDate = new DateTime(command.Year, command.Month, day);
 
                 var competenceDate = new DateTime(command.Year, command.Month, 1).AddMonths(tpl.CompetenceOffsetMonths);
