@@ -8,5 +8,6 @@ namespace personal_finance.Application.Interfaces.Recurring
     public interface IRecurringTemplateQueryRepository
     {
         Task<IReadOnlyList<RecurringTemplateListItemDto>> GetAllAsync(bool includeInactive = false);
+        Task<RecurringTemplateListItemDto?> GetByIdAsync(Guid id);
     }
 }

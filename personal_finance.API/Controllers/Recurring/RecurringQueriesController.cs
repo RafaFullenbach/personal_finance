@@ -16,5 +16,18 @@ namespace personal_finance.API.Controllers.Recurring
             var result = await handler.HandleAsync(includeInactive);
             return Ok(result);
         }
+
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetById(
+            [FromRoute] Guid id,
+            [FromServices] GetRecurringTemplateByIdHandler handler)
+        {
+            var result = await handler.HandleAsync(new GetRecurringTemplateByIdQuery
+            {
+                Id = id
+            });
+
+            return Ok(result);
+        }
     }
 }

@@ -43,5 +43,27 @@ namespace personal_finance.Infrastructure.Persistence.Repositories.Recurring
 
             return items.AsReadOnly();
         }
+
+        public Task<RecurringTemplateListItemDto?> GetByIdAsync(Guid id)
+        {
+            return _db.RecurringTransactionTemplates
+                .AsNoTracking()
+                .Where(x => x.Id == id)
+                .Select(x => new RecurringTemplateListItemDto
+                {
+                    Id = x.Id,
+                    Amount = x.Amount,
+                    Type = x.Type.ToString(),
+                    AccountId = x.AccountId,
+                    CategoryId = x.CategoryId,
+                    Description = x.Description,
+                    DayOfMonth = x.DayOfMonth,
+                    CompetenceOffsetMonths = x.CompetenceOffsetMonths,
+                    StartDate = x.StartDate,
+                    EndDate = x.EndDate,
+                    IsActive = x.IsActive
+                })
+                .FirstOrDefaultAsync();
+        }
     }
 }

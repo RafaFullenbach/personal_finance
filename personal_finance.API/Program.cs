@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+ï»¿using Microsoft.EntityFrameworkCore;
 using personal_finance.API.Middleware;
 using personal_finance.Application.Interfaces.Accounts;
 using personal_finance.Application.Interfaces.Budgets;
@@ -31,7 +31,10 @@ using personal_finance.Application.UseCases.Categories.DeactivateCategory;
 using personal_finance.Application.UseCases.Categories.UpdateCategory;
 using personal_finance.Application.UseCases.CloseMonth;
 using personal_finance.Application.UseCases.Recurring.CreateRecurringTemplate;
+using personal_finance.Application.UseCases.Recurring.ActivateRecurringTemplate;
+using personal_finance.Application.UseCases.Recurring.DeactivateRecurringTemplate;
 using personal_finance.Application.UseCases.Recurring.GenerateRecurringTransactions;
+using personal_finance.Application.UseCases.Recurring.UpdateRecurringTemplate;
 using personal_finance.Application.UseCases.Transactions.CancelTransaction;
 using personal_finance.Application.UseCases.Transactions.ConfirmTransaction;
 using personal_finance.Application.UseCases.Transactions.CreateTransaction;
@@ -63,7 +66,7 @@ builder.Services.AddCors(options =>
             )
             .AllowAnyHeader()
             .AllowAnyMethod();
-        // .AllowCredentials(); // só se no futuro usar cookies/auth
+        // .AllowCredentials(); // sÃ³ se no futuro usar cookies/auth
     });
 });
 
@@ -84,7 +87,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Repositórios EF
+// RepositÃ³rios EF
 builder.Services.AddScoped<ITransactionRepository, EfTransactionRepository>();
 builder.Services.AddScoped<ITransactionQueryRepository, EfTransactionQueryRepository>();
 
@@ -119,6 +122,9 @@ builder.Services.AddScoped<CreateCategoryHandler>();
 builder.Services.AddScoped<UpsertBudgetHandler>();
 builder.Services.AddScoped<CreateRecurringTemplateHandler>();
 builder.Services.AddScoped<GenerateRecurringTransactionsHandler>();
+builder.Services.AddScoped<UpdateRecurringTemplateHandler>();
+builder.Services.AddScoped<ActivateRecurringTemplateHandler>();
+builder.Services.AddScoped<DeactivateRecurringTemplateHandler>();
 builder.Services.AddScoped<CloseMonthHandler>();
 builder.Services.AddScoped<UpdateTransactionHandler>();
 builder.Services.AddScoped<UpdateAccountHandler>();
@@ -137,6 +143,7 @@ builder.Services.AddScoped<GetAllAccountsHandler>();
 builder.Services.AddScoped<GetAllCategoriesHandler>();
 builder.Services.AddScoped<GetBudgetsByMonthHandler>();
 builder.Services.AddScoped<GetAllRecurringTemplatesHandler>();
+builder.Services.AddScoped<GetRecurringTemplateByIdHandler>();
 builder.Services.AddScoped<GetAccountByIdHandler>();
 builder.Services.AddScoped<GetCategoryByIdHandler>();
 builder.Services.AddScoped<GetBudgetByIdHandler>();
@@ -185,3 +192,5 @@ app.MapControllers();
 app.Run();
 
 public partial class Program { }
+
+
